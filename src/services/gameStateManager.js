@@ -4,7 +4,23 @@ const singularClient = require('./singularClient');
 
 class GameStateManager {
   constructor() {
-    this.activeMatchId = db.prepare('SELECT partido_id FROM calendario_partidos WHERE partido_id IS NOT NULL ORDER BY activo DESC, partido_id DESC LIMIT 1').get()?.partido_id || 1;
+    const activeCal = db.prepare(`
+      SELECT cp.partido_id 
+      FROM calendario_partidos cp
+      JOIN partidos p ON cp.partido_id = p.id
+      WHERE cp.activo = 1 AND p.estado = 'en_vivo'
+      LIMIT 1
+    `).get();
+
+    const activeLive = db.prepare(`
+      SELECT id FROM partidos WHERE estado = 'en_vivo' ORDER BY id DESC LIMIT 1
+    `).get();
+
+    const latestMatch = db.prepare(`
+      SELECT id FROM partidos ORDER BY id DESC LIMIT 1
+    `).get();
+
+    this.activeMatchId = activeCal?.partido_id || activeLive?.id || latestMatch?.id || 1;
     this.state = null;
     this.localTeam = null;
     this.visitorTeam = null;

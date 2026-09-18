@@ -231,6 +231,66 @@ app.get('/api/partidos/activo', (req, res) => {
   }
 });
 
+// Finalizar partido activo
+app.post('/api/partidos/activo/finalizar', (req, res) => {
+  try {
+    const matchId = gameStateManager.activeMatchId;
+    const match = db.prepare('SELECT * FROM partidos WHERE id = ?').get(matchId);
+    if (!match) return res.status(404).json({ error: 'Partido no encontrado' });
+
+    if (match.estado === 'finalizado') {
+      return res.json({ success: true, message: 'El partido ya estaba finalizado', state: gameStateManager.getFullState() });
+    }
+
+    gameStateManager.persistStateToDb();
+    db.prepare("UPDATE partidos SET estado = 'finalizado' WHERE id = ?").run(matchId);
+
+    // Si este partido está vinculado a un item de calendario, actualizarlo también
+    const c = db.prepare('SELECT * FROM calendario_partidos WHERE partido_id = ? OR (activo = 1 AND estado <> \'finalizado\')').get(matchId);
+    if (c) {
+      const { runs_local, runs_visitante } = gameStateManager.state;
+      db.prepare("UPDATE calendario_partidos SET estado = 'finalizado', activo = 0, runs_local = ?, runs_visitante = ?, partido_id = ? WHERE id = ?").run(runs_local, runs_visitante, matchId, c.id);
+
+      if (c.bracket_id) {
+        const s = db.prepare('SELECT * FROM playoff_bracket WHERE id = ?').get(c.bracket_id);
+        if (s && !s.ganador_id) {
+          const winner = runs_local > runs_visitante ? c.equipo_local_id : c.equipo_visitante_id;
+          const x = s.score_1 + (winner === s.equipo_1_id ? 1 : 0);
+          const y = s.score_2 + (winner === s.equipo_2_id ? 1 : 0);
+          const done = Math.max(x, y) >= s.victorias_necesarias;
+          db.prepare('UPDATE playoff_bracket SET score_1 = ?, score_2 = ?, ganador_id = ?, estado = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?').run(x, y, done ? winner : null, done ? 'finalizado' : 'en_curso', s.id);
+        }
+      }
+    }
+
+    gameStateManager.history = [];
+    io.emit('estado:actualizado', gameStateManager.getFullState());
+    io.emit('calendario:actualizado');
+    res.json({ success: true, state: gameStateManager.getFullState() });
+  } catch (err) {
+    console.error('Error al finalizar partido activo:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Reanudar partido activo (desbloquear controles en vivo)
+app.post('/api/partidos/activo/reanudar', (req, res) => {
+  try {
+    const matchId = gameStateManager.activeMatchId;
+    db.prepare("UPDATE partidos SET estado = 'en_vivo' WHERE id = ?").run(matchId);
+    const c = db.prepare('SELECT * FROM calendario_partidos WHERE partido_id = ?').get(matchId);
+    if (c) {
+      db.prepare("UPDATE calendario_partidos SET estado = 'en_vivo', activo = 1 WHERE id = ?").run(c.id);
+    }
+    io.emit('estado:actualizado', gameStateManager.getFullState());
+    io.emit('calendario:actualizado');
+    res.json({ success: true, state: gameStateManager.getFullState() });
+  } catch (err) {
+    console.error('Error al reanudar partido activo:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Configurar y emitir Matchup (Panel A)
 app.post('/api/matchup/set', async (req, res) => {
   try {

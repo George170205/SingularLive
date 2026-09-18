@@ -308,7 +308,30 @@ function renderGameState(fullState) {
   document.querySelectorAll('#panel-b-view button[onclick]').forEach(button => {
     if (/^(modifyRun|addBall|addStrike|resetCount|modifyOut|toggleBase|clearBases|toggleHalfInning|setHalf|stepInning|confirmInningChange|executeUndo)\(/.test(button.getAttribute('onclick'))) button.disabled = finished;
   });
-  document.querySelector('.hero-air-status').textContent = finished ? 'Partido finalizado · Resultado guardado' : 'Control del partido · Singular.Live';
+
+  const airStatus = document.querySelector('.hero-air-status');
+  if (airStatus) {
+    if (finished) {
+      airStatus.innerHTML = `<span>Partido finalizado · Resultado guardado</span> <button type="button" class="btn-resume-small" onclick="reanudarPartidoActivo()">Reanudar partido</button>`;
+    } else {
+      airStatus.textContent = 'Control del partido · Singular.Live';
+    }
+  }
+
+  const btnFinish = document.getElementById('btn-finish-live');
+  if (btnFinish) {
+    if (finished) {
+      btnFinish.textContent = 'Reanudar partido';
+      btnFinish.className = 'btn-action-primary btn-finish-match is-resume';
+      btnFinish.onclick = reanudarPartidoActivo;
+      btnFinish.disabled = false;
+    } else {
+      btnFinish.textContent = 'Finalizar partido';
+      btnFinish.className = 'btn-action-primary btn-finish-match';
+      btnFinish.onclick = finalizarPartidoActivo;
+      btnFinish.disabled = false;
+    }
+  }
 
   // Equipos en Hero Scoreboard
   const nameLocEl = document.getElementById('mirror-name-local');
@@ -1830,18 +1853,60 @@ function renderScheduledMatch() {
     : `<h3>No hay partidos pendientes</h3><button class="btn-action-primary" onclick="switchPanelASubTab('calendar')">Ir al programador</button>`;
 }
 
-let finishingMatch=false;
+let finishingMatch = false;
 async function finalizarPartidoActivo() {
-  const c=calendarioItems.find(c=>c.activo);
-  if(!c||finishingMatch) return;
-  const score=currentGameState.state;
-  if(!confirm('¿Finalizar '+c.visitor_nombre+' '+score.runs_visitante+' – '+score.runs_local+' '+c.local_nombre+'? Se guardará el resultado y se actualizará la serie.')) return;
-  finishingMatch=true;
+  if (!currentGameState || !currentGameState.match || finishingMatch) return;
+  const m = currentGameState.match;
+  const s = currentGameState.state;
+
+  if (m.estado === 'finalizado') {
+    alert('Este partido ya se encuentra finalizado. Presiona "Reanudar partido" si deseas seguir operando en vivo.');
+    return;
+  }
+
+  const msg = `¿Finalizar partido ${m.local.nombre} ${s.runs_local} – ${s.runs_visitante} ${m.visitor.nombre}?\n\nSe guardará el resultado oficial y se cerrará el juego.`;
+  if (!confirm(msg)) return;
+
+  finishingMatch = true;
   try {
-    const r=await fetch('/api/calendario/'+c.id+'/finalizar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({runs_local:score.runs_local,runs_visitante:score.runs_visitante})});
-    const data=await r.json(); if(!r.ok) throw Error(data.error);
-    await loadCalendario(); await loadBracket();
-  }catch(e){alert(e.message);}finally{finishingMatch=false;}
+    const c = (calendarioItems || []).find(item => item.partido_id === m.id && item.activo);
+    let url = '/api/partidos/activo/finalizar';
+    let payload = { runs_local: s.runs_local, runs_visitante: s.runs_visitante };
+
+    if (c && c.id) {
+      url = `/api/calendario/${c.id}/finalizar`;
+    }
+
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'No se pudo finalizar el partido');
+
+    await loadCalendario();
+    await loadBracket();
+  } catch (e) {
+    alert(`Error: ${e.message}`);
+  } finally {
+    finishingMatch = false;
+  }
+}
+
+async function reanudarPartidoActivo() {
+  try {
+    const res = await fetch('/api/partidos/activo/reanudar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error al reanudar');
+    await loadCalendario();
+    await loadBracket();
+  } catch (e) {
+    alert(`Error: ${e.message}`);
+  }
 }
 
 async function populateSeries(selected='') {

@@ -1,0 +1,20 @@
+const fs=require('fs');
+const Database=require('better-sqlite3');
+const roster=require('../src/services/rosterStore');
+const official=require('../src/services/officialStore');
+const stage=JSON.parse(fs.readFileSync('official-sync-staging.json','utf8'));
+const post=JSON.parse(fs.readFileSync('official-postseason-staging.json','utf8'));
+const lineup=JSON.parse(fs.readFileSync('official-lineup-staging.json','utf8'));
+const apply=process.argv.includes('--apply');
+(async()=>{
+ const source=new Database('database.sqlite');
+ if(apply) await source.backup(`database.before-official-sync-${Date.now()}.sqlite`);
+ const db=apply?source:new Database(source.serialize());
+ db.pragma('foreign_keys = ON');
+ roster.init(db);
+ const report=official.apply(db,stage,post,lineup);
+ if(db.pragma('foreign_key_check').length)throw Error('Foreign key check failed');
+ fs.writeFileSync(apply?'official-sync-report.json':'official-sync-preview.json',JSON.stringify(report,null,2));
+ console.log(JSON.stringify(report,null,2));
+ db.close();if(!apply)source.close();
+})().catch(e=>{console.error(e.message);process.exitCode=1;});

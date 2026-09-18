@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toros de Tijuana — Broadcast Control System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Barlow+Semi+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/app.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body class="broadcast-rig">
+  
+  <!-- ============================================== -->
+  <!-- TOP NAVIGATION BAR (FULL WIDTH)                 -->
+  <!-- ============================================== -->
+  <header class="master-header">
+    <div class="header-left">
+      <div class="brand-badge">TIJ</div>
+      <div class="brand-info">
+        <span class="system-title">Toros de Tijuana</span>
+        <span class="system-subtitle">Sistema de control de gráficos · Singular.Live</span>
+      </div>
+    </div>
+
+    <!-- Center Navigation Tabs -->
+    <nav class="console-tabs">
+      <button class="console-tab active" id="tab-btn-panel-b" onclick="switchPanel('b')">
+        Panel B — En vivo
+      </button>
+      <button class="console-tab" id="tab-btn-panel-a" onclick="switchPanel('a')">
+        Panel A — Pre-partido
+      </button>
+      <button class="console-tab" id="tab-btn-teams" onclick="switchPanel('teams')">
+        Equipos & Logos
+      </button>
+      <button class="console-tab" id="tab-btn-roster" onclick="switchPanel('roster')">
+        Rosters & Jugadores
+      </button>
+      <button class="console-tab tab-outlined-red" id="tab-btn-overlays" onclick="switchPanel('overlays')">
+        Gestión de overlays
+      </button>
+    </nav>
+
+    <!-- Right Telemetry & External Link -->
+    <div class="header-right">
+      <div class="telemetry-item" id="sync-badge">
+        <span class="status-dot"></span>
+        <span class="status-text" id="sync-text">Sincronizado</span>
+        <span class="status-latency" id="sync-latency">13 ms</span>
+      </div>
+      <span class="header-sep">|</span>
+      <a href="https://app.singular.live/controlapps/3ObWIqbNNtoA6mI3Di4GmJ" target="_blank" rel="noreferrer" class="link-singular-manual">
+        Singular Manual
+      </a>
+    </div>
+  </header>
+
+  <!-- ============================================== -->
+  <!-- MAIN CONSOLE BODY (FULL WIDTH DESKTOP)          -->
+  <!-- ============================================== -->
+  <main class="console-body">
+
+    <!-- ============================================== -->
+    <!-- PANEL B: CONTROL EN VIVO                        -->
+    <!-- ============================================== -->
+    <section id="panel-b-view" class="view-panel active">
+      
+      <!-- HERO SCOREBOARD BAR -->
+      <div class="hero-scoreboard">
+        
+        <!-- Local Team -->
+        <div class="hero-team local">
+          <div class="hero-team-mark"><img id="hero-logo-local" class="hero-team-logo" alt="Logo local"><span class="hero-team-badge local" id="hero-badge-local">TIJ</span></div>
+          <div class="hero-team-meta">
+            <span class="hero-role-label">Local</span>
+            <span class="hero-team-name" id="mirror-name-local">Toros de Tijuana</span>
+          </div>
+          <div class="hero-score-wrapper">
+            <span class="hero-score-digit" id="mirror-runs-local">0</span>
+            <span class="hero-score-unit">car.</span>
+          </div>
+        </div>
+
+        <!-- Center Match Clock / Inning / Status -->
+        <div class="hero-center-status">
+          <button class="hero-inning-pill" id="btn-toggle-half" onclick="toggleHalfInning()" title="Alternar Alta/Baja">
+            <span class="hero-inning-arrow" id="mirror-inning-arrow">↑</span>
+            <span id="mirror-inning-text">1ra Alta</span>
+          </button>
+
+          <!-- Digital LED arrays -->
+          <div class="hero-leds-row">
+            <div class="hero-led-group balls" id="leds-balls">
+              <span class="led-pip"></span>
+              <span class="led-pip"></span>
+              <span class="led-pip"></span>
+            </div>
+            <span class="hero-led-sep">·</span>
+            <div class="hero-led-group strikes" id="leds-strikes">
+              <span class="led-pip"></span>
+              <span class="led-pip"></span>
+            </div>
+            <span class="hero-led-sep">·</span>
+            <div class="hero-led-group outs" id="leds-outs">
+              <span class="led-pip"></span>
+              <span class="led-pip"></span>
+            </div>
+          </div>
+
+          <div class="hero-air-status">
+            En vivo · Active: B2X Baseball
+          </div>
+        </div>
+
+        <!-- Visitor Team -->
+        <div class="hero-team visitor">
+          <div class="hero-score-wrapper align-right">
+            <span class="hero-score-digit" id="mirror-runs-visitor">0</span>
+            <span class="hero-score-unit">car.</span>
+          </div>
+          <div class="hero-team-meta align-right">
+            <span class="hero-role-label">Visitante</span>
+            <span class="hero-team-name" id="mirror-name-visitor">Sultanes de Monterrey</span>
+          </div>
+          <div class="hero-team-mark"><img id="hero-logo-visitor" class="hero-team-logo" alt="Logo visitante"><span class="hero-team-badge visitor" id="hero-badge-visitor">MTY</span></div>
+        </div>
+
+      </div>
+
+      <!-- Inning 3-Outs Alert Banner (Appears when 3 Outs reached) -->
+      <div class="inning-transition-alert" id="inning-change-banner" style="display: none;">
+        <div class="alert-info-block">
+          <span class="alert-tag">AVISO DE INNING</span>
+          <span class="alert-headline">3 OUTS REGISTRADOS</span>
+          <span class="alert-subline">Presiona para ejecutar el cambio de media entrada (reiniciará bases, conteo y outs en Singular.Live).</span>
+        </div>
+        <button class="btn-confirm-inning" onclick="confirmInningChange()">
+          EJECUTAR CAMBIO DE INNING <span id="banner-next-inning-text">[A BAJA]</span>
+        </button>
+      </div>
+
+      <!-- THREE COLUMN LAYOUT -->
+      <div class="grid-three-columns">
+        
+        <!-- ============================================ -->
+        <!-- COLUMN 1: ANOTACIÓN & DIAMANTE (~25%)         -->
+        <!-- ============================================ -->
+        <div class="col-left">
+          
+          <!-- Card: Anotación de carreras -->
+          <div class="b-card">
+            <div class="b-card-header">
+              <span class="b-card-title">Anotación de carreras</span>
+              <span class="b-card-tag">Marcador</span>
+            </div>
+            
+            <div class="runs-rows-list">
+              <!-- Local -->
+              <div class="run-row-item">
+                <div class="run-row-info">
+                  <div class="run-row-label">
+                    <span class="run-code" id="ctrl-local-code">TIJ</span>
+                    <span class="run-sep">—</span>
+                    <span class="run-role">Local</span>
+                  </div>
+                  <span class="run-subname" id="ctrl-local-subname">Toros de Tijuana</span>
+                </div>
+                <div class="run-row-buttons">
+                  <button class="btn-run-add local" onclick="modifyRun('local', 1)">+1 carrera</button>
+                  <button class="btn-run-sub" onclick="modifyRun('local', -1)">-1</button>
+                </div>
+              </div>
+
+              <!-- Visitor -->
+              <div class="run-row-item">
+                <div class="run-row-info">
+                  <div class="run-row-label">
+                    <span class="run-code" id="ctrl-visitor-code">MTY</span>
+                    <span class="run-sep">—</span>
+                    <span class="run-role">Visitante</span>
+                  </div>
+                  <span class="run-subname" id="ctrl-visitor-subname">Sultanes de Monterrey</span>
+                </div>
+                <div class="run-row-buttons">
+                  <button class="btn-run-add visitor" onclick="modifyRun('visitante', 1)">+1 carrera</button>
+                  <button class="btn-run-sub" onclick="modifyRun('visitante', -1)">-1</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card: Corredores en base -->
+          <div class="b-card">
+            <div class="b-card-header">
+              <span class="b-card-title">Corredores en base</span>
+              <button class="b-card-link-btn" onclick="clearBases()">Limpiar</button>
+            </div>
+            
+            <div class="diamond-interactive-box">
+              <div class="field-diamond">
+                <div class="diamond-track"></div>
+                <button class="diamond-base b-2" id="base-plate-2" onclick="toggleBase(2)">2B</button>
+                <button class="diamond-base b-3" id="base-plate-3" onclick="toggleBase(3)">3B</button>
+                <button class="diamond-base b-1" id="base-plate-1" onclick="toggleBase(1)">1B</button>
+                <div class="diamond-base hp">HP</div>
+              </div>
+              <span class="diamond-caption">Clic en base para alternar corredor</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ============================================ -->
+        <!-- COLUMN 2: CONTEO & OUTS (~48% - CENTER WIDE) -->
+        <!-- ============================================ -->
+        <div class="col-center">
+          
+          <!-- Card: Conteo de pitcheos -->
+          <div class="b-card">
+            <div class="b-card-header">
+              <span class="b-card-title">Conteo de pitcheos</span>
+              <button class="b-card-link-btn" onclick="resetCount()">Resetear (0-0)</button>
+            </div>
+
+            <div class="pitch-count-grid">
+              <!-- Bolas -->
+              <div class="pitch-module balls">
+                <span class="pitch-label">Bolas</span>
+                <div class="pitch-capsule balls">
+                  <span class="pitch-digit green" id="big-balls-num">0</span>
+                </div>
+                <button class="btn-pitch-large green" onclick="addBall()">
+                  +1 bola
+                </button>
+              </div>
+
+              <!-- Strikes -->
+              <div class="pitch-module strikes">
+                <span class="pitch-label">Strikes</span>
+                <div class="pitch-capsule strikes">
+                  <span class="pitch-digit orange" id="big-strikes-num">0</span>
+                </div>
+                <button class="btn-pitch-large orange" onclick="addStrike()">
+                  +1 strike
+                </button>
+              </div>
+            </div>
+
+            <!-- Nuevo bateador bar -->
+            <button class="btn-batter-reset" onclick="resetCount()">
+              Nuevo bateador (0-0)
+            </button>
+          </div>
+
+          <!-- Card: Outs e inning -->
+          <div class="b-card">
+            <div class="b-card-header">
+              <span class="b-card-title">Outs e inning</span>
+              <span class="b-card-tag">Tiempos</span>
+            </div>
+
+            <div class="outs-display-strip">
+              <div class="outs-display-left">
+                <div class="outs-red-box">
+                  <span class="outs-red-digit" id="big-outs-num">0</span>
+                </div>
+                <span class="outs-word" id="big-outs-text">Outs</span>
+              </div>
+              <div class="outs-buttons-right">
+                <button class="btn-out-add" onclick="modifyOut(1)">+1 out</button>
+                <button class="btn-out-sub" onclick="modifyOut(-1)">-1</button>
+              </div>
+            </div>
+
+            <!-- Inning row -->
+            <div class="inning-stepper-strip">
+              <div class="inning-stepper-left">
+                <span class="inning-strip-title">Inning</span>
+                <button class="btn-step-circle" onclick="stepInning(-1)">−</button>
+                <span class="inning-strip-num" id="stepper-inning-val">1</span>
+                <button class="btn-step-circle" onclick="stepInning(1)">+</button>
+              </div>
+
+              <div class="inning-half-toggles">
+                <button class="btn-half-toggle active" id="btn-half-alta" onclick="setHalf('alta')">Alta</button>
+                <button class="btn-half-toggle" id="btn-half-baja" onclick="setHalf('baja')">Baja</button>
+              </div>
+            
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- COLUMN 3: OVERLAYS (SLIDES) & SEGURIDAD      -->
+        <!-- ============================================ -->
+        <div class="col-right">
+          
+          <!-- Card: Control de overlays CON ACCESOS RÁPIDOS Y MICRO-EDICIÓN -->
+          <div class="b-card">
+            <div class="b-card-header">
+              <span class="b-card-title">Control de overlays</span>
+              <span class="b-card-tag">Emisión en Vivo</span>
+            </div>
+
+            <div class="overlays-toggle-list">
+              
+              <!-- 1. Score Bug -->
+              <div class="overlay-toggle-item">
+                <div class="overlay-toggle-info">
+                  <span class="overlay-toggle-name">Score Bug — Baseball</span>
+                  <span class="overlay-toggle-desc">Marcador Principal</span>
+                </div>
+                <div class="overlay-slide-wrapper">
+                  <label class="slide-switch">
+                    <input type="checkbox" id="slide-score_bug" checked onchange="onOverlaySlideChange('score_bug', this.checked)">
+                    <span class="slide-slider"></span>
+                  </label>
+                  <span class="slide-status-tag" id="slide-tag-score_bug">ON</span>
+                </div>
+              </div>
+
+              <!-- 2. Lower Matchup -->
+              <div class="overlay-toggle-item">
+                <div class="overlay-toggle-info">
+                  <span class="overlay-toggle-name">Lower — Matchup</span>
+                  <span class="overlay-toggle-desc">Banda Inferior Equipos</span>
+                </div>
+                <div class="overlay-slide-wrapper">
+                  <label class="slide-switch">
+                    <input type="checkbox" id="slide-lower_matchup" onchange="onOverlaySlideChange('lower_matchup', this.checked)">
+                    <span class="slide-slider"></span>
+                  </label>
+                  <span class="slide-status-tag off" id="slide-tag-lower_matchup">OFF</span>
+                </div>
+              </div>
+
+              <!-- 3. Fullscreen Matchup -->
+              <div class="overlay-toggle-item">
+                <div class="overlay-toggle-info">
+                  <span class="overlay-toggle-name">Fullscreen — Matchup</span>
+                  <span class="overlay-toggle-desc">Previa Pantalla Completa</span>
+                </div>
+                <div class="overlay-slide-wrapper">
+                  <label class="slide-switch">
+                    <input type="checkbox" id="slide-fullscreen_matchup" onchange="onOverlaySlideChange('fullscreen_matchup', this.checked)">
+                    <span class="slide-slider"></span>
+                  </label>
+                  <span class="slide-status-tag off" id="slide-tag-fullscreen_matchup">OFF</span>
+                </div>
+              </div>
+
+              <!-- 4. Team Lineups -->
+              <div class="overlay-toggle-item">
+                <div class="overlay-toggle-info">
+                  <span class="overlay-toggle-name">Panel — Team Lineups</span>
+                  <span class="overlay-toggle-desc">Alineación Titular</span>
+                </div>
+                <div class="overlay-slide-wrapper">
+                  <label class="slide-switch">
+                    <input type="checkbox" id="slide-team_lineups" onchange="onOverlaySlideChange('team_lineups', this.checked)">
+                    <span class="slide-slider"></span>
+                  </label>
+                  <span class="slide-status-tag off" id="slide-tag-team_lineups">OFF</span>
+                </div>
+              </div>
+
+              <!-- 5. Fullscreen Comparison -->
+              <div class="overlay-toggle-item">
+                <div class="overlay-toggle-info">
+                  <span class="overlay-toggle-name">Fullscreen — Comparison</span>
+                  <span class="overlay-toggle-desc">Comparativa Estadísticas</span>
+                </div>
+                <div class="overlay-slide-wrapper">
+                  <label class="slide-switch">
+                    <input type="checkbox" id="slide-comparison_stats" onchange="onOverlaySlideChange('comparison_stats', this.checked)">
+                    <span class="slide-slider"></span>
+                  </label>
+                  <span class="slide-status-tag off" id="slide-tag-comparison_stats">OFF</span>
+                </div>
+              </div>
+
+              <!-- 6. Player Bio -->
+              <div class="overlay-toggle-item">
+                <div class="overlay-toggle-info">
+                  <span class="overlay-toggle-name">Lower — Player Bio</span>
+                  <span class="overlay-toggle-desc" id="panel-b-bio-active-label">Ficha de Jugador</span>
+                </div>
+                <div class="overlay-slide-wrapper">
+                  <label class="slide-switch">
+                    <input type="checkbox" id="slide-player_bio" onchange="onOverlaySlideChange('player_bio', this.checked)">
+                    <span class="slide-slider"></span>
+                  </label>
+                  <span class="slide-status-tag off" id="slide-tag-player_bio">OFF</span>
+                </div>
+              </div>
+
+              <!-- Lanzador Rápido de Bio en Vivo (Panel B) -->
+              <div class="panel-b-bio-drawer">
+                <div class="panel-b-bio-header">
+                  <span style="font-size: 9px; font-weight: 700; color: var(--t-gray-400); letter-spacing: 0.5px;">JUGADOR PARA BIO:</span>
+                  <div class="btn-group-segmented">
+                    <button type="button" class="btn-segment-small active" id="btn-quick-bio-local" onclick="setQuickBioTeam('local')">Local (TIJ)</button>
+                    <button type="button" class="btn-segment-small" id="btn-quick-bio-visitor" onclick="setQuickBioTeam('visitor')">Rival (MTY)</button>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  <select id="panel-b-bio-player-select" class="b-select" style="flex: 1; font-size: 11px; padding: 4px 6px;" onchange="onPanelBPlayerSelect()"></select>
+                </div>
+                <textarea id="panel-b-bio-custom-text" class="b-textarea" rows="2" style="font-size: 10px; padding: 4px 6px;" placeholder="Texto de 2 líneas para Singular..."></textarea>
+                <div style="display: flex; gap: 6px;">
+                  <button type="button" class="btn-action-primary" style="flex: 1; padding: 5px; font-size: 10px;" onclick="triggerPanelBBio('In')">
+                    LANZAR BIO [IN]
+                  </button>
+                  <button type="button" class="btn-run-sub" style="flex: 1; width: auto; padding: 5px; font-size: 10px;" onclick="triggerPanelBBio('Out2')">
+                    QUITAR [OUT]
+                  </button>
+                </div>
+              </div>
+
+              <!-- ACCESO DIRECTO: GESTIÓN DE CINTILLOS Y OVERLAYS -->
+              <div class="panel-b-cintillos-redirect-box">
+                <button type="button" class="btn-goto-cintillos" onclick="navigateToOverlaysCategory('banners')">
+                  <div class="goto-cintillos-left">
+                    <span class="goto-cintillos-tag">GESTIÓN &amp; EDICIÓN</span>
+                    <span class="goto-cintillos-title">Cintillos y Banners Inferiores</span>
+                    <span class="goto-cintillos-desc">Edita textos de 1 y 2 líneas, tickers y emite al aire</span>
+                  </div>
+                  <div class="goto-cintillos-arrow">
+                    <span class="arrow-text">Ir a cintillos</span>
+                    <span class="arrow-icon">→</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div> <!-- /col-right -->
+
+      </div> <!-- /grid-three-columns -->
+
+      <!-- ============================================ -->
+      <!-- FULL-WIDTH BOTTOM BAR: SEGURIDAD OPERACIONAL -->
+      <!-- ============================================ -->
+      <div class="b-card safety-operational-fullwidth">
+        <div class="safety-fullwidth-inner">
+          <div class="safety-left-group">
+            <div class="safety-header-label">
+              <span class="b-card-title">Seguridad operacional</span>
+              <span class="safety-sub-badge">Control de Emergencia & Deshacer</span>
+            </div>
+            <div class="safety-buttons-row">
+              <button class="btn-action-primary btn-finish-match" id="btn-finish-live" onclick="finalizarPartidoActivo()">
+                Finalizar partido
+              </button>
+              <button class="safety-undo-box horizontal" id="btn-undo" onclick="executeUndo()" disabled>
+                <div class="undo-head-line">
+                  <span class="undo-arrow" style="font-family: inherit; font-size: 11px; font-weight: 800;">DESHACER</span>
+                  <span class="undo-title">Deshacer última acción</span>
+                </div>
+                <span class="undo-subtitle" id="undo-last-action-desc">Sin acciones registradas</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="safety-right-group">
+            <div class="telemetry-specs-list horizontal-bar">
+              <div class="spec-item">
+                <span class="spec-label">Canal activo</span>
+                <span class="spec-value-badge green">■ Main Output (Baseball)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Cola de envío</span>
+                <span class="spec-value-badge green" id="telemetry-queue-status">● Activa</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Latencia Singular</span>
+                <span class="spec-value-badge green" id="telemetry-latency">● 13 ms</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PANEL A: PRE-PARTIDO & GESTIÓN DE CATÁLOGO     -->
+    <!-- ============================================== -->
+    <section id="panel-a-view" class="view-panel">
+      
+      <!-- Subnavigation for Panel A -->
+      <div class="panel-a-nav-bar">
+        <button class="panel-a-nav-tab active" id="btn-subnav-matchup" onclick="switchPanelASubTab('matchup')">
+          Configuración de Partido & Lineup
+        </button>
+        <button class="panel-a-nav-tab" id="btn-subnav-teams" onclick="switchPanelASubTab('teams')">
+          Gestor de Equipos & Logos
+        </button>
+        <button class="panel-a-nav-tab" id="btn-subnav-roster" onclick="switchPanelASubTab('roster')">
+          Gestor de Jugadores
+        </button>
+<button class="panel-a-nav-tab" id="btn-subnav-calendar" onclick="switchPanelASubTab('calendar')">Programador de Calendario y Series</button>
+      </div>
+
+      <div id="subtab-calendar-view" class="subtab-content">        <!-- Card: Programador de Calendario de Partidos & Cuadro de Playoffs -->
+        <div class="b-card" id="card-calendario-programador" style="margin-bottom: 16px; border-left: 3px solid var(--t-red); background: rgba(196, 18, 47, 0.03);">
+          
+          <div class="b-card-header" style="display: flex; justify-content: space-between; align-items: center; user-select: none;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <span class="b-card-title">Programador de Calendario & Series</span>
+              <span class="b-card-tag" style="background: rgba(196, 18, 47, 0.2); color: #FFF;">Base de Datos Local LMB</span>
+              <span id="cal-summary-badge" style="font-size: 10px; font-weight: 700; background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 4px; color: var(--t-gray-300);">
+                Cargando partidos...
+              </span>
+            </div>
+
+            <!-- Controles de vista y nuevo partido (CERO EMOJIS) -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="btn-group-segmented">
+                <button type="button" class="btn-segment-small active" id="btn-cal-view-list" onclick="setCalendarioViewMode('list')">Lista</button>
+                <button type="button" class="btn-segment-small" id="btn-cal-view-bracket" onclick="setCalendarioViewMode('bracket')">Cuadro (Bracket)</button>
+              </div>
+
+              <button type="button" class="btn-action-primary" style="padding: 5px 12px; font-size: 11px; font-weight: 700;" onclick="openNewCalendarioModal()">
+                + Programar Partido
+              </button>
+            </div>
+          </div>
+
+          <div id="cal-collapsible-body" style="padding-top: 4px;">
+            <!-- Formulario emergente / inline para crear o editar partido -->
+            <div id="box-calendario-form" style="display: none; background: rgba(0,0,0,0.6); border: 1px solid var(--t-red); border-radius: 8px; padding: 14px; margin: 10px 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 13px; font-weight: 700; color: #FFF;" id="cal-form-title">Programar Nuevo Partido</span>
+                <button type="button" class="btn-small-action" onclick="closeCalendarioModal()" style="padding: 2px 8px;">Cerrar</button>
+              </div>
+              <input type="hidden" id="cal-form-id">
+              <label>Serie del bracket (opcional)</label><select id="cal-form-bracket" class="b-select"><option value="">Temporada regular / sin bracket</option></select>
+              <label><input type="checkbox" id="cal-form-conditional"> Solo si es necesario</label>
+              <p>Fechas y horas en tiempo de Tijuana.</p>
+              <details><summary>Crear una nueva serie (al mejor de siete)</summary>
+                <p>Usa los equipos y el nombre de serie del formulario. Cada juego guardado se vincula a la serie seleccionada.</p>
+                <label for="series-zone">Zona</label><select id="series-zone" class="b-select"><option value="norte">Norte</option><option value="sur">Sur</option><option value="final">Final</option></select>
+                <label for="series-round">Ronda</label><select id="series-round" class="b-select"><option value="cuartos">Primer playoff</option><option value="semis">Serie de zona</option><option value="final_zona">Campeonato de zona</option><option value="serie_del_rey">Serie del Rey</option></select>
+                <button class="btn-small-action" onclick="createCalendarSeries()">Crear serie con estos equipos</button>
+              </details>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 10px;">
+                <div>
+                  <label style="font-size: 11px; color: var(--t-gray-400); display: block; margin-bottom: 4px;">Equipo Local:</label>
+                  <select id="cal-form-local" class="b-select" style="font-size: 11px;"></select>
+                </div>
+                <div>
+                  <label style="font-size: 11px; color: var(--t-gray-400); display: block; margin-bottom: 4px;">Equipo Visitante:</label>
+                  <select id="cal-form-visitor" class="b-select" style="font-size: 11px;"></select>
+                </div>
+                <div>
+                  <label style="font-size: 11px; color: var(--t-gray-400); display: block; margin-bottom: 4px;">Serie / Torneo:</label>
+                  <input type="text" id="cal-form-serie" class="b-input" style="font-size: 11px;" placeholder="ej. Serie Oficial LMB" value="Serie Oficial LMB">
+                </div>
+                <div>
+                  <label style="font-size: 11px; color: var(--t-gray-400); display: block; margin-bottom: 4px;">Fecha y Hora:</label>
+                  <input type="datetime-local" id="cal-form-fecha" class="b-input" style="font-size: 11px;">
+                </div>
+                <div style="grid-column: 1 / -1;">
+                  <label style="font-size: 11px; color: var(--t-gray-400); display: block; margin-bottom: 4px;">Sede / Estadio:</label>
+                  <input type="text" id="cal-form-sede" class="b-input" style="font-size: 11px;" placeholder="ej. Estadio Chevron, Tijuana" value="Estadio Chevron, Tijuana">
+                </div>
+                <div style="grid-column: 1 / -1;">
+                  <label style="font-size: 11px; color: var(--t-gray-400); display: block; margin-bottom: 4px;">Notas de Transmisión:</label>
+                  <input type="text" id="cal-form-notas" class="b-input" style="font-size: 11px;" placeholder="ej. Transmisión especial TV & Streaming">
+                </div>
+              </div>
+              <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                <button type="button" class="btn-run-sub" style="width: auto; padding: 6px 14px; font-size: 11px;" onclick="closeCalendarioModal()">Cancelar</button>
+                <button type="button" class="btn-action-primary" style="padding: 6px 16px; font-size: 11px;" onclick="saveCalendarioForm()">Guardar Partido en Calendario</button>
+              </div>
+            </div>
+
+            <!-- VISTA 1: LISTA CON SCROLL VERTICAL -->
+            <div id="cal-view-list-container" style="display: block;">
+              <div id="calendario-cards-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px; max-height: 520px; overflow-y: auto; padding-right: 4px;">
+                <!-- Renderizado dinámico de tarjetas vía app.js -->
+              </div>
+            </div>
+
+            <!-- VISTA 2: CUADRO DE PLAYOFFS / BRACKET LMB -->
+            <div id="cal-view-bracket-container" style="display: none; margin-top: 10px;">
+              <div class="bracket-top-header">
+                <div class="bracket-badge-green">LMB POSTEMPORADA</div>
+                <div class="bracket-main-title">CUADRO DE PLAYOFFS & SERIE DEL REY</div>                <div class="bracket-sub-info">Resultados verificados al 9 de septiembre de 2026; los cierres del operador actualizan las victorias.</div>
+                <p>Primer playoff: tres series por zona. Charros y Guerreros avanzaron como mejores perdedores. Los marcadores indican juegos ganados, no carreras.</p>
+              </div>
+
+              <div class="bracket-scroll-wrapper">
+                <div class="bracket-layout" id="bracket-layout-tree">
+                  <!-- Renderizado dinámico del árbol vía app.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+</div>
+      <!-- SUBTAB 1: MATCHUP Y LINEUP -->
+      <div id="subtab-matchup-view" class="subtab-content active">
+
+
+<div class="b-card" id="scheduled-match-banner" style="margin-bottom:16px">Cargando partido programado...</div>
+        <!-- Matchup Selector -->
+        <div class="b-card" id="matchup-preview-card" style="margin-bottom: 16px;">
+          <div class="b-card-header">
+            <span class="b-card-title">Configuración de enfrentamiento (Matchup)</span>
+            <span class="b-card-tag">Pre-partido</span>
+          </div>
+
+          <!-- Botones de selección rápida de rival -->
+          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; padding-bottom: 10px; border-bottom: 1px solid var(--t-dark-line);">
+            <span style="font-size: 11px; font-weight: 700; color: var(--t-gray-400);">Rivales Rápidos:</span>
+            <button type="button" class="btn-small-action" style="color: #FFF; font-weight: 700;" onclick="quickSelectMatchup('TIJ', 'TAB')">Toros vs Olmecas (TAB)</button>
+            <button type="button" class="btn-small-action" onclick="quickSelectMatchup('TIJ', 'MTY')">Toros vs Sultanes (MTY)</button>
+            <button type="button" class="btn-small-action" onclick="quickSelectMatchup('TIJ', 'MEX')">Toros vs Diablos (MEX)</button>
+            <button type="button" class="btn-small-action" onclick="quickSelectMatchup('TIJ', 'SAL')">Toros vs Saraperos (SAL)</button>
+            <button type="button" class="btn-small-action" onclick="quickSelectMatchup('TIJ', 'MVA')">Toros vs Acereros (MVA)</button>
+            <button type="button" class="btn-small-action" onclick="quickSelectMatchup('TIJ', 'YUC')">Toros vs Leones (YUC)</button>
+          </div>
+
+          <div class="panel-a-matchup-layout">
+            <!-- Local -->
+            <div class="panel-a-team-box local">
+              <span class="panel-a-role-tag">EQUIPO LOCAL</span>
+              <select id="select-team-local" class="b-select" onchange="previewMatchupSelection()"></select>
+              <div class="panel-a-team-preview">
+                <img src="/assets/logos/tij.svg" class="panel-a-logo" id="prev-logo-local">
+                <div class="panel-a-meta">
+                  <span class="panel-a-name" id="prev-name-local">Toros de Tijuana</span>
+                  <span class="panel-a-code" id="prev-siglas-local">TIJ</span>
+                  <div class="panel-a-swatches">
+                    <span class="swatch-dot" id="prev-col-local-1"></span>
+                    <span class="swatch-dot" id="prev-col-local-2"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- VS & Swap Button -->
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+              <div class="panel-a-vs">VS</div>
+              <button type="button" class="btn-run-sub" style="width: auto; padding: 4px 10px; font-size: 11px; border-radius: 12px;" onclick="swapLocalVisitorTeams()" title="Invertir condición Local / Visitante">
+                ⇄ Invertir
+              </button>
+            </div>
+
+            <!-- Visitor -->
+            <div class="panel-a-team-box visitor">
+              <span class="panel-a-role-tag visitor">EQUIPO VISITANTE</span>
+              <select id="select-team-visitor" class="b-select" onchange="previewMatchupSelection()"></select>
+              <div class="panel-a-team-preview">
+                <img src="/assets/logos/mty.svg" class="panel-a-logo" id="prev-logo-visitor">
+                <div class="panel-a-meta">
+                  <span class="panel-a-name" id="prev-name-visitor">Sultanes de Monterrey</span>
+                  <span class="panel-a-code" id="prev-siglas-visitor">MTY</span>
+                  <div class="panel-a-swatches">
+                    <span class="swatch-dot" id="prev-col-visitor-1"></span>
+                    <span class="swatch-dot" id="prev-col-visitor-2"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: center; margin-top: 14px;">
+            <button class="btn-action-primary" onclick="submitMatchupSetup()">
+              APLICAR Y TRANSMITIR ENFRENTAMIENTO A SINGULAR.LIVE
+            </button>
+          </div>
+        </div>
+
+        <!-- Lineup & Bio Grid -->
+        <div class="panel-a-subgrid">
+          <!-- CARD: LINEUP (DUAL TEAM: LOCAL O RIVAL) -->
+          <div class="b-card">
+            <div class="b-card-header">
+              <span class="b-card-title" id="lineup-table-title">Alineación Titular (Lineup — 11 Posiciones)</span>
+              <div class="btn-group-segmented">
+                <button type="button" class="btn-segment-small active" id="btn-lineup-team-local" onclick="selectLineupTeam('local')">Local (TIJ)</button>
+                <button type="button" class="btn-segment-small" id="btn-lineup-team-visitor" onclick="selectLineupTeam('visitor')">Rival (MTY)</button>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 11px; color: var(--t-gray-400); white-space: nowrap;">Subtítulo:</span>
+              <input type="text" id="lineup-subtitle-input" class="b-input" value="Lineup Titular Oficial" style="font-size: 11px; padding: 4px 8px;">
+            </div>
+
+            <p id="lineup-source-note" style="font-size:11px;color:var(--t-gray-400);margin:8px 0">Consultando alineación guardada...</p>
+            <button class="btn-small-action" id="btn-save-lineup" onclick="saveLineupTemplate()" style="margin-bottom:8px">Guardar plantilla de 11</button>
+            <p style="font-size:11px;color:var(--t-gray-400)">Selecciona jugadores y posiciones. Usa las flechas para ordenar las filas del gráfico; guarda antes de transmitir.</p>
+            <div class="lineup-table-box">
+              <table class="lineup-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Núm</th>
+                    <th>Jugador</th>
+                    <th>Pos</th>
+                  </tr>
+                </thead>
+                <tbody id="lineup-table-body">
+                  <!-- Populated via app.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <button class="btn-action-primary" id="btn-push-lineup" onclick="pushCurrentLineupToSingular()" style="margin-top: 10px;">
+              Transmitir Lineup a Singular.Live
+            </button>
+          </div>
+
+          <!-- CARD: FICHA BIOGRÁFICA (DUAL TEAM: LOCAL O RIVAL) -->
+          <div class="b-card">
+            <div class="b-card-header">
+              <span class="b-card-title">Ficha biográfica de jugador (Lower — Bio)</span>
+              <div class="btn-group-segmented">
+                <button type="button" class="btn-segment-small active" id="btn-bio-team-local" onclick="selectBioTeam('local')">Local (TIJ)</button>
+                <button type="button" class="btn-segment-small" id="btn-bio-team-visitor" onclick="selectBioTeam('visitor')">Rival (MTY)</button>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <label style="font-size: 11px; color: var(--t-gray-400);">Seleccionar Jugador:</label>
+                <select id="select-bio-player" class="b-select" onchange="onBioPlayerSelect()"></select>
+              </div>
+
+              <div class="bio-card-preview">
+                <img src="/assets/players/lake.svg" class="bio-avatar-img" id="bio-avatar-img">
+                <div>
+                  <span class="bio-name-txt" id="bio-player-name">JUNIOR LAKE</span>
+                  <span class="bio-num-txt" id="bio-player-num">#23 — JARDINERO CENTRAL</span>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <label style="font-size: 11px; color: var(--t-gray-400);">Título en Pantalla:</label>
+                <input type="text" id="bio-custom-title" class="b-input" value="JUNIOR LAKE — #23" style="font-size: 11px; font-weight: 700;">
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <label style="font-size: 11px; color: var(--t-gray-400);">Texto de Emisión (2 líneas):</label>
+                <textarea id="bio-custom-text" class="b-textarea" rows="2">Capitán de Toros de Tijuana&#10;.295 AVG | 14 HR | 58 RBI</textarea>
+              </div>
+
+              <div style="display: flex; gap: 8px; margin-top: 4px;">
+                <button class="btn-action-primary" style="flex: 1;" onclick="pushBioToSingular('In')">
+                  Transmitir Biografía [IN]
+                </button>
+                <button class="btn-run-sub" style="width: auto; padding: 0 16px;" onclick="pushBioToSingular('Out1')">
+                  Quitar [OUT]
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- SUBTAB 2: GESTOR DE EQUIPOS Y LOGOS -->
+      <div id="subtab-teams-view" class="subtab-content">
+        <div class="b-card" style="margin-bottom: 16px;">
+          <div class="b-card-header">
+            <span class="b-card-title">Catálogo de Equipos de la Liga</span>
+            <button class="btn-action-primary" style="padding: 6px 14px; font-size: 11px;" onclick="openNewTeamModal()">
+              + Añadir Nuevo Equipo
+            </button>
+          </div>
+
+          <!-- Teams Grid -->
+          <div class="teams-manager-grid" id="teams-manager-grid">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Formulario Modal/Inline de Creación / Edición de Equipo -->
+        <div class="b-card" id="team-edit-box" style="display: none;">
+          <div class="b-card-header">
+            <span class="b-card-title" id="team-form-title">Editar Equipo</span>
+            <button class="b-card-link-btn" onclick="closeTeamEditBox()">Cerrar</button>
+          </div>
+
+          <form id="team-form" onsubmit="saveTeam(event)" class="crud-form">
+            <input type="hidden" id="team-form-id">
+            
+            <div class="crud-form-row">
+              <div class="crud-field">
+                <label>Nombre del Equipo:</label>
+                <input type="text" id="team-form-name" class="b-input" required placeholder="Ej: Diablos Rojos">
+              </div>
+              <div class="crud-field">
+                <label>Siglas (3 Letras):</label>
+                <input type="text" id="team-form-siglas" class="b-input" required maxlength="5" placeholder="MEX">
+              </div>
+            </div>
+
+            <div class="crud-form-row">
+              <div class="crud-field">
+                <label>Color Primario:</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <input type="color" id="team-form-color1" class="color-picker-input" value="#C4122F" onchange="document.getElementById('team-form-color1-hex').value = this.value">
+                  <input type="text" id="team-form-color1-hex" class="b-input" value="#C4122F" oninput="document.getElementById('team-form-color1').value = this.value">
+                </div>
+              </div>
+              <div class="crud-field">
+                <label>Color Secundario:</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <input type="color" id="team-form-color2" class="color-picker-input" value="#000000" onchange="document.getElementById('team-form-color2-hex').value = this.value">
+                  <input type="text" id="team-form-color2-hex" class="b-input" value="#000000" oninput="document.getElementById('team-form-color2').value = this.value">
+                </div>
+              </div>
+            </div>
+
+            <div class="crud-field">
+              <label>Logo del Equipo (Subir Archivo o URL):</label>
+              <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                <img id="team-form-logo-preview" src="/assets/logos/tij.svg" class="upload-preview-logo">
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                  <input type="file" id="team-form-logo-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" class="b-file-input" onchange="onTeamLogoFileSelected(event)">
+                  <input type="text" id="team-form-logo-url" class="b-input" placeholder="Ruta o URL del logo (ej: /assets/logos/tij.svg)" oninput="document.getElementById('team-form-logo-preview').src = this.value">
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 14px;">
+              <button type="submit" class="btn-action-primary" style="flex: 1;">Guardar Equipo</button>
+              <button type="button" class="btn-run-sub" style="width: auto; padding: 0 16px;" onclick="closeTeamEditBox()">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- SUBTAB 3: GESTOR DE JUGADORES -->
+      <div id="subtab-roster-view" class="subtab-content">
+        <div class="b-card">
+          <div class="b-card-header">
+            <span class="b-card-title">Gestión de Roster de Jugadores</span>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <label style="font-size: 11px; color: var(--t-gray-400);">Equipo:</label>
+              <label style="font-size:11px"><input type="checkbox" id="show-inactive-roster" onchange="loadRosterManager(activeRosterManagerTeamId)"> Incluir historial</label>
+              <select id="select-roster-manager-team" class="b-select" style="width: 200px;" onchange="loadRosterManager(this.value)"></select>
+              <button type="button" class="btn-run-sub" id="btn-sync-mlb-roster" style="width: auto; padding: 6px 12px; font-size: 11px; border-color: rgba(196, 18, 47, 0.5); color: #FFF;" onclick="syncCurrentTeamRosterFromMlb()">
+                Sincronizar Roster Oficial (MLB)
+              </button>
+              <button class="btn-action-primary" style="padding: 6px 14px; font-size: 11px;" onclick="openNewPlayerModal()">
+                + Añadir Jugador
+              </button>
+            </div>
+          </div>
+
+          <!-- Table of players for the selected team -->
+          <div class="lineup-table-box">
+            <table class="lineup-table">
+              <thead>
+                <tr>
+                  <th>NÚM</th>
+                  <th>JUGADOR</th>
+                  <th>POSICIÓN</th>
+                  <th>BIOGRAFÍA / NOTAS</th>
+                  <th>ACCIONES</th>
+                </tr>
+              </thead>
+              <tbody id="roster-manager-tbody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Formulario Modal/Inline de Creación / Edición de Jugador -->
+        <div class="b-card" id="player-edit-box" style="display: none; margin-top: 16px;">
+          <div class="b-card-header">
+            <span class="b-card-title" id="player-form-title">Editar Jugador</span>
+            <button class="b-card-link-btn" onclick="closePlayerEditBox()">Cerrar</button>
+          </div>
+
+          <form id="player-form" onsubmit="savePlayer(event)" class="crud-form">
+            <input type="hidden" id="player-form-id">
+            <input type="hidden" id="player-form-team-id">
+
+            <div class="crud-form-row">
+              <div class="crud-field" style="max-width: 100px;">
+                <label>Número (#):</label>
+                <input type="number" id="player-form-num" class="b-input" required min="0" max="99" placeholder="23">
+              </div>
+              <div class="crud-field">
+                <label>Nombre Completo:</label>
+                <input type="text" id="player-form-name" class="b-input" required placeholder="Ej: Junior Lake">
+              </div>
+              <div class="crud-field" style="max-width: 140px;">
+                <label>Posición:</label>
+                <select id="player-form-pos" class="b-select">
+                  <option value="OF">OF (Jardinero)</option>
+                  <option value="1B">1B (Primera)</option>
+                  <option value="2B">2B (Segunda)</option>
+                  <option value="3B">3B (Tercera)</option>
+                  <option value="SS">SS (Shortstop)</option>
+                  <option value="C">C (Receptor)</option>
+                  <option value="DH">DH (Designado)</option>
+                  <option value="P">P (Pitcher)</option>
+                  <option value="CP">CP (Cerrador)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="crud-field">
+              <label>Foto / Headshot del Jugador (Subir Archivo o URL):</label>
+              <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                <img id="player-form-photo-preview" src="/assets/players/lake.svg" class="upload-preview-player">
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                  <input type="file" id="player-form-photo-file" accept="image/png,image/jpeg,image/svg+xml,image/webp" class="b-file-input" onchange="onPlayerPhotoFileSelected(event)">
+                  <input type="text" id="player-form-photo-url" class="b-input" placeholder="Ruta o URL de la foto (ej: /assets/players/lake.svg)" oninput="document.getElementById('player-form-photo-preview').src = this.value">
+                </div>
+              </div>
+            </div>
+
+            <div class="crud-field">
+              <label>Biografía / Texto de emisión (para overlay de Bio):</label>
+              <textarea id="player-form-bio" class="b-textarea" rows="2" placeholder="Línea 1&#10;Línea 2 de estadísticas"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 14px;">
+              <button type="submit" class="btn-action-primary" style="flex: 1;">Guardar Jugador</button>
+              <button type="button" class="btn-run-sub" style="width: auto; padding: 0 16px;" onclick="closePlayerEditBox()">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================== -->
+    <!-- OVERLAYS CATALOG                                -->
+    <!-- ============================================== -->
+    <section id="overlays-view" class="view-panel">
+      <div class="b-card">
+        <div class="b-card-header">
+          <div>
+            <span class="b-card-title">Catálogo y Control de Overlays Singular.Live</span>
+            <div style="font-size: 11px; color: var(--t-gray-400); margin-top: 3px;">
+              Control de emisión de las 15 subcomposiciones: Marcadores, Cintillos, Redes Sociales y Elementos Libres.
+            </div>
+          </div>
+          <span class="b-card-tag">Control App: 3ObWIq...</span>
+        </div>
+
+        <!-- Filtros por categoría -->
+        <div class="overlay-category-filters" id="overlay-category-filters">
+          <button type="button" class="btn-ov-filter active" id="btn-filter-all" onclick="filterOverlaysCatalog('all')">Todos (15)</button>
+          <button type="button" class="btn-ov-filter" id="btn-filter-partido" onclick="filterOverlaysCatalog('partido')">Marcador & Previa (6)</button>
+          <button type="button" class="btn-ov-filter" id="btn-filter-banners" onclick="filterOverlaysCatalog('banners')">Cintillos Inferiores (3)</button>
+          <button type="button" class="btn-ov-filter" id="btn-filter-upper_right" onclick="filterOverlaysCatalog('upper_right')">Esquina Superior & Redes (3)</button>
+          <button type="button" class="btn-ov-filter" id="btn-filter-freeform" onclick="filterOverlaysCatalog('freeform')">Fondos & Libres (3)</button>
+        </div>
+
+        <div class="overlays-catalog-grid" id="overlays-catalog-grid">
+          <!-- Populated via app.js -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

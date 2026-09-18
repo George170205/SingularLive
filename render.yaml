@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: toros-singular-control
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SINGULAR_APP_TOKEN
+        value: 3ObWIqbNNtoA6mI3Di4GmJ
+      - key: MASTER_KEY
+        generateValue: true
+      - key: DATABASE_FILE
+        value: database.sqlite

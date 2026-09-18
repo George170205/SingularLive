@@ -1,0 +1,34 @@
+# Dependencias
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Variables de entorno locales
+.env
+.env.local
+.env.*.local
+
+# Archivos de depuración y logs
+logs/
+*.log
+
+# Archivos temporales de SQLite (mantenemos database.sqlite si se desea base inicial)
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+database.before-*.sqlite
+recovery-*/
+
+# Sistema Operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

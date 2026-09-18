@@ -1,0 +1,625 @@
+{
+  "checkedAt": "2026-09-10T05:22:34.256Z",
+  "local": [
+    {
+      "nombre": "Aneurys Zabala",
+      "numero": 0,
+      "posicion": "P",
+      "mlb_id": 656008
+    },
+    {
+      "nombre": "Gilberto Celestino",
+      "numero": 2,
+      "posicion": "OF",
+      "mlb_id": 665482
+    },
+    {
+      "nombre": "Harold Castro",
+      "numero": 3,
+      "posicion": "SS",
+      "mlb_id": null
+    },
+    {
+      "nombre": "Ali Solis",
+      "numero": 4,
+      "posicion": "C",
+      "mlb_id": 455378
+    },
+    {
+      "nombre": "Bobby Bradley",
+      "numero": 5,
+      "posicion": "1B",
+      "mlb_id": null
+    },
+    {
+      "nombre": "Rafael Ortega",
+      "numero": 5,
+      "posicion": "OF",
+      "mlb_id": 542364
+    },
+    {
+      "nombre": "Randy Acosta",
+      "numero": 6,
+      "posicion": "P",
+      "mlb_id": 844406
+    },
+    {
+      "nombre": "Jairus Richards",
+      "numero": 7,
+      "posicion": "LF",
+      "mlb_id": null
+    },
+    {
+      "nombre": "Jonathan Guzmán",
+      "numero": 7,
+      "posicion": "SS",
+      "mlb_id": 666695
+    },
+    {
+      "nombre": "Aneury Tavárez",
+      "numero": 10,
+      "posicion": "OF",
+      "mlb_id": null
+    },
+    {
+      "nombre": "Justin Turner",
+      "numero": 10,
+      "posicion": "1B",
+      "mlb_id": 457759
+    },
+    {
+      "nombre": "Juan Hillman",
+      "numero": 11,
+      "posicion": "P",
+      "mlb_id": 663535
+    },
+    {
+      "nombre": "Sergio Burruel",
+      "numero": 12,
+      "posicion": "C",
+      "mlb_id": 571531
+    },
+    {
+      "nombre": "Isaac Rodríguez",
+      "numero": 13,
+      "posicion": "2B",
+      "mlb_id": null
+    },
+    {
+      "nombre": "Danry Vasquez",
+      "numero": 13,
+      "posicion": "OF",
+      "mlb_id": 606281
+    },
+    {
+      "nombre": "Hernán Pérez",
+      "numero": 14,
+      "posicion": "SS",
+      "mlb_id": 541650
+    },
+    {
+      "nombre": "Enny Romero",
+      "numero": 16,
+      "posicion": "P",
+      "mlb_id": 544836
+    },
+    {
+      "nombre": "Adonis Medina",
+      "numero": 18,
+      "posicion": "P",
+      "mlb_id": 658431
+    },
+    {
+      "nombre": "Donny Sands",
+      "numero": 19,
+      "posicion": "C",
+      "mlb_id": null
+    },
+    {
+      "nombre": "Jordi Serna",
+      "numero": 19,
+      "posicion": "IF",
+      "mlb_id": 843396
+    },
+    {
+      "nombre": "Tomás Telis",
+      "numero": 20,
+      "posicion": "C",
+      "mlb_id": 542513
+    },
+    {
+      "nombre": "Teddy Stankiewicz",
+      "numero": 22,
+      "posicion": "P",
+      "mlb_id": 621103
+    },
+    {
+      "nombre": "Brady Feigl",
+      "numero": 23,
+      "posicion": "P",
+      "mlb_id": 621399
+    },
+    {
+      "nombre": "Niko Vásquez",
+      "numero": 24,
+      "posicion": "3B",
+      "mlb_id": null
+    },
+    {
+      "nombre": "Jack Mayfield",
+      "numero": 25,
+      "posicion": "2B",
+      "mlb_id": 608686
+    },
+    {
+      "nombre": "Phillip Evans",
+      "numero": 26,
+      "posicion": "3B",
+      "mlb_id": 595943
+    },
+    {
+      "nombre": "Junior Lake",
+      "numero": 27,
+      "posicion": "OF",
+      "mlb_id": 516809
+    },
+    {
+      "nombre": "Luis Marquez",
+      "numero": 29,
+      "posicion": "P",
+      "mlb_id": 700587
+    },
+    {
+      "nombre": "Gabriel Gutiérrez",
+      "numero": 31,
+      "posicion": "DH",
+      "mlb_id": null
+    },
+    {
+      "nombre": "Noah Skirrow",
+      "numero": 32,
+      "posicion": "P",
+      "mlb_id": 659418
+    },
+    {
+      "nombre": "Jorge Perez",
+      "numero": 35,
+      "posicion": "P",
+      "mlb_id": 656839
+    },
+    {
+      "nombre": "Randy Wynne",
+      "numero": 36,
+      "posicion": "P",
+      "mlb_id": 691094
+    },
+    {
+      "nombre": "Franchy Cordero",
+      "numero": 38,
+      "posicion": "OF",
+      "mlb_id": 614173
+    },
+    {
+      "nombre": "David Reyes",
+      "numero": 40,
+      "posicion": "P",
+      "mlb_id": 547862
+    },
+    {
+      "nombre": "Wilmer Flores",
+      "numero": 41,
+      "posicion": "1B",
+      "mlb_id": 527038
+    },
+    {
+      "nombre": "Francisco Lugo",
+      "numero": 43,
+      "posicion": "LF",
+      "mlb_id": 546366
+    },
+    {
+      "nombre": "Miguel Díaz",
+      "numero": 45,
+      "posicion": "P",
+      "mlb_id": 622766
+    },
+    {
+      "nombre": "Rafael Castaneda",
+      "numero": 46,
+      "posicion": "P",
+      "mlb_id": 805715
+    },
+    {
+      "nombre": "Jonathan Aro",
+      "numero": 49,
+      "posicion": "P",
+      "mlb_id": 608167
+    },
+    {
+      "nombre": "Mario Meza",
+      "numero": 50,
+      "posicion": "P",
+      "mlb_id": 616405
+    },
+    {
+      "nombre": "Florencio Serrano",
+      "numero": 51,
+      "posicion": "P",
+      "mlb_id": 677568
+    },
+    {
+      "nombre": "Roel Ramírez",
+      "numero": 53,
+      "posicion": "P",
+      "mlb_id": 641995
+    },
+    {
+      "nombre": "Abraham Favela",
+      "numero": 58,
+      "posicion": "IF",
+      "mlb_id": 842553
+    },
+    {
+      "nombre": "Domingo Germán",
+      "numero": 59,
+      "posicion": "P",
+      "mlb_id": 593334
+    },
+    {
+      "nombre": "Luis Amador",
+      "numero": 60,
+      "posicion": "C",
+      "mlb_id": 824003
+    },
+    {
+      "nombre": "Brett de Geus",
+      "numero": 63,
+      "posicion": "P",
+      "mlb_id": 676969
+    },
+    {
+      "nombre": "Daniel Martinez",
+      "numero": 65,
+      "posicion": "P",
+      "mlb_id": 681979
+    },
+    {
+      "nombre": "Caleb Baragar",
+      "numero": 66,
+      "posicion": "P",
+      "mlb_id": 670056
+    },
+    {
+      "nombre": "Adbert Alzolay",
+      "numero": 73,
+      "posicion": "P",
+      "mlb_id": 640470
+    },
+    {
+      "nombre": "Isaac Rodriguez",
+      "numero": 74,
+      "posicion": "2B",
+      "mlb_id": 665455
+    },
+    {
+      "nombre": "Bryan Zazueta",
+      "numero": 80,
+      "posicion": "P",
+      "mlb_id": 844405
+    },
+    {
+      "nombre": "Arath Garza",
+      "numero": 82,
+      "posicion": "C",
+      "mlb_id": 843068
+    },
+    {
+      "nombre": "Silvino Bracho",
+      "numero": 99,
+      "posicion": "CP",
+      "mlb_id": null
+    },
+    {
+      "nombre": "Edson Garcia",
+      "numero": 99,
+      "posicion": "OF",
+      "mlb_id": 616404
+    }
+  ],
+  "official": [
+    {
+      "nombre": "Abraham Favela",
+      "mlb_id": 842553,
+      "numero": "58",
+      "posicion": "IF",
+      "status": "Active"
+    },
+    {
+      "nombre": "Adbert Alzolay",
+      "mlb_id": 640470,
+      "numero": "73",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Adonis Medina",
+      "mlb_id": 658431,
+      "numero": "18",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Ali Solis",
+      "mlb_id": 455378,
+      "numero": "4",
+      "posicion": "C",
+      "status": "Active"
+    },
+    {
+      "nombre": "Brady Feigl",
+      "mlb_id": 621399,
+      "numero": "23",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Brett de Geus",
+      "mlb_id": 676969,
+      "numero": "63",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Daniel Martinez",
+      "mlb_id": 681979,
+      "numero": "65",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "David Reyes",
+      "mlb_id": 547862,
+      "numero": "40",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Edson Garcia",
+      "mlb_id": 616404,
+      "numero": "99",
+      "posicion": "OF",
+      "status": "Active"
+    },
+    {
+      "nombre": "Enny Romero",
+      "mlb_id": 544836,
+      "numero": "16",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Florencio Serrano",
+      "mlb_id": 677568,
+      "numero": "51",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Franchy Cordero",
+      "mlb_id": 614173,
+      "numero": "38",
+      "posicion": "OF",
+      "status": "Active"
+    },
+    {
+      "nombre": "Francisco Lugo",
+      "mlb_id": 546366,
+      "numero": "43",
+      "posicion": "LF",
+      "status": "Active"
+    },
+    {
+      "nombre": "Gilberto Celestino",
+      "mlb_id": 665482,
+      "numero": "2",
+      "posicion": "OF",
+      "status": "Active"
+    },
+    {
+      "nombre": "Hernán Pérez",
+      "mlb_id": 541650,
+      "numero": "14",
+      "posicion": "SS",
+      "status": "Active"
+    },
+    {
+      "nombre": "Isaac Rodriguez",
+      "mlb_id": 665455,
+      "numero": "74",
+      "posicion": "2B",
+      "status": "Active"
+    },
+    {
+      "nombre": "Jack Mayfield",
+      "mlb_id": 608686,
+      "numero": "25",
+      "posicion": "2B",
+      "status": "Active"
+    },
+    {
+      "nombre": "Jonathan Aro",
+      "mlb_id": 608167,
+      "numero": "49",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Jonathan Guzmán",
+      "mlb_id": 666695,
+      "numero": "7",
+      "posicion": "SS",
+      "status": "Active"
+    },
+    {
+      "nombre": "Jorge Perez",
+      "mlb_id": 656839,
+      "numero": "35",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Juan Hillman",
+      "mlb_id": 663535,
+      "numero": "11",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Junior Lake",
+      "mlb_id": 516809,
+      "numero": "27",
+      "posicion": "OF",
+      "status": "Active"
+    },
+    {
+      "nombre": "Justin Turner",
+      "mlb_id": 457759,
+      "numero": "10",
+      "posicion": "1B",
+      "status": "Active"
+    },
+    {
+      "nombre": "Luis Amador",
+      "mlb_id": 824003,
+      "numero": "60",
+      "posicion": "C",
+      "status": "Active"
+    },
+    {
+      "nombre": "Luis Marquez",
+      "mlb_id": 700587,
+      "numero": "29",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Mario Meza",
+      "mlb_id": 616405,
+      "numero": "50",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Miguel Díaz",
+      "mlb_id": 622766,
+      "numero": "45",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Noah Skirrow",
+      "mlb_id": 659418,
+      "numero": "32",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Phillip Evans",
+      "mlb_id": 595943,
+      "numero": "26",
+      "posicion": "3B",
+      "status": "Active"
+    },
+    {
+      "nombre": "Roel Ramírez",
+      "mlb_id": 641995,
+      "numero": "53",
+      "posicion": "P",
+      "status": "Active"
+    },
+    {
+      "nombre": "Tomás Telis",
+      "mlb_id": 542513,
+      "numero": "20",
+      "posicion": "C",
+      "status": "Active"
+    },
+    {
+      "nombre": "Wilmer Flores",
+      "mlb_id": 527038,
+      "numero": "41",
+      "posicion": "1B",
+      "status": "Active"
+    }
+  ],
+  "singular": [
+    {
+      "field": "title",
+      "value": "ANEURYS ZABALA — #0"
+    },
+    {
+      "field": "subtitle",
+      "value": "TEMPORADA REGULAR"
+    },
+    {
+      "field": "title",
+      "value": "PRÓXIMO PARTIDO"
+    },
+    {
+      "field": "Subtitle",
+      "value": "Lineup Titular - Toros de Tijuana"
+    },
+    {
+      "field": "Title",
+      "value": "TOROS DE TIJUANA"
+    },
+    {
+      "field": "lineupsTable_r1",
+      "value": "03, Harold Castro"
+    },
+    {
+      "field": "lineupsTable_r10",
+      "value": "55, Teddy Stankiewicz"
+    },
+    {
+      "field": "lineupsTable_r11",
+      "value": "99, Silvino Bracho"
+    },
+    {
+      "field": "lineupsTable_r2",
+      "value": "05, Bobby Bradley"
+    },
+    {
+      "field": "lineupsTable_r3",
+      "value": "07, Jairus Richards"
+    },
+    {
+      "field": "lineupsTable_r4",
+      "value": "10, Aneury Tavárez"
+    },
+    {
+      "field": "lineupsTable_r5",
+      "value": "13, Isaac Rodríguez"
+    },
+    {
+      "field": "lineupsTable_r6",
+      "value": "19, Donny Sands"
+    },
+    {
+      "field": "lineupsTable_r7",
+      "value": "23, Junior Lake"
+    },
+    {
+      "field": "lineupsTable_r8",
+      "value": "24, Niko Vásquez"
+    },
+    {
+      "field": "lineupsTable_r9",
+      "value": "31, Gabriel Gutiérrez"
+    },
+    {
+      "field": "Subtitle",
+      "value": "Subtitle"
+    }
+  ]
+}

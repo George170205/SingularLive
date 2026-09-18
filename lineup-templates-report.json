@@ -1,0 +1,1002 @@
+[
+  {
+    "team": "Toros de Tijuana",
+    "withoutStats": 1,
+    "players": [
+      {
+        "name": "Tomás Telis",
+        "position": "C"
+      },
+      {
+        "name": "Justin Turner",
+        "position": "1B"
+      },
+      {
+        "name": "Isaac Rodriguez",
+        "position": "2B"
+      },
+      {
+        "name": "Phillip Evans",
+        "position": "3B"
+      },
+      {
+        "name": "Hernán Pérez",
+        "position": "SS"
+      },
+      {
+        "name": "Junior Lake",
+        "position": "LF"
+      },
+      {
+        "name": "Franchy Cordero",
+        "position": "CF"
+      },
+      {
+        "name": "Edson Garcia",
+        "position": "RF"
+      },
+      {
+        "name": "Jack Mayfield",
+        "position": "DH"
+      },
+      {
+        "name": "David Reyes",
+        "position": "SP"
+      },
+      {
+        "name": "Mario Meza",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Sultanes de Monterrey",
+    "withoutStats": 2,
+    "players": [
+      {
+        "name": "Carlos Soto",
+        "position": "C"
+      },
+      {
+        "name": "Victor Mendoza",
+        "position": "1B"
+      },
+      {
+        "name": "Gustavo Nunez",
+        "position": "2B"
+      },
+      {
+        "name": "Maikel Franco",
+        "position": "3B"
+      },
+      {
+        "name": "Javier Salazar",
+        "position": "SS"
+      },
+      {
+        "name": "Harold Ramírez",
+        "position": "LF"
+      },
+      {
+        "name": "Sócrates Brito",
+        "position": "CF"
+      },
+      {
+        "name": "Jose Cardona",
+        "position": "RF"
+      },
+      {
+        "name": "Josh Lester",
+        "position": "DH"
+      },
+      {
+        "name": "Manny Banuelos",
+        "position": "SP"
+      },
+      {
+        "name": "Daniel Cruz",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Diablos Rojos del México",
+    "withoutStats": 1,
+    "players": [
+      {
+        "name": "Carlos Pérez",
+        "position": "C"
+      },
+      {
+        "name": "Jon Singleton",
+        "position": "1B"
+      },
+      {
+        "name": "Robinson Canó",
+        "position": "2B"
+      },
+      {
+        "name": "Moises Gutierrez",
+        "position": "3B"
+      },
+      {
+        "name": "Juan Carlos Gamboa",
+        "position": "SS"
+      },
+      {
+        "name": "Julian Ornelas",
+        "position": "LF"
+      },
+      {
+        "name": "José Marmolejos",
+        "position": "CF"
+      },
+      {
+        "name": "Ramón Flores",
+        "position": "RF"
+      },
+      {
+        "name": "Carlos Sepulveda",
+        "position": "DH"
+      },
+      {
+        "name": "Justin Courtney",
+        "position": "SP"
+      },
+      {
+        "name": "Tomohiro Anraku",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Leones de Yucatán",
+    "withoutStats": 2,
+    "players": [
+      {
+        "name": "Juan Uriarte",
+        "position": "C"
+      },
+      {
+        "name": "Breyvic Valera",
+        "position": "2B"
+      },
+      {
+        "name": "Dalton Guthrie",
+        "position": "3B"
+      },
+      {
+        "name": "Addison Russell",
+        "position": "SS"
+      },
+      {
+        "name": "Jose Gaitan",
+        "position": "LF"
+      },
+      {
+        "name": "Eric Filia",
+        "position": "CF"
+      },
+      {
+        "name": "Moisés Gómez",
+        "position": "RF"
+      },
+      {
+        "name": "Marco Jaime",
+        "position": "IF"
+      },
+      {
+        "name": "Fabian Urbina",
+        "position": "DH"
+      },
+      {
+        "name": "Yoanner Negrin",
+        "position": "SP"
+      },
+      {
+        "name": "Carlos Bustamante",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Acereros de Monclova",
+    "withoutStats": 0,
+    "players": [
+      {
+        "name": "Rusber Estrada",
+        "position": "C"
+      },
+      {
+        "name": "Andretty Cordero",
+        "position": "1B"
+      },
+      {
+        "name": "Aldo Nunez",
+        "position": "2B"
+      },
+      {
+        "name": "Rodolfo Amador",
+        "position": "3B"
+      },
+      {
+        "name": "Abiam Cruz",
+        "position": "SS"
+      },
+      {
+        "name": "Magneuris Sierra",
+        "position": "LF"
+      },
+      {
+        "name": "Juan Mora",
+        "position": "CF"
+      },
+      {
+        "name": "Jecksson Flores",
+        "position": "RF"
+      },
+      {
+        "name": "Leo Heras",
+        "position": "DH"
+      },
+      {
+        "name": "Wilmer Rios",
+        "position": "SP"
+      },
+      {
+        "name": "Jorge Rodriguez",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Saraperos de Saltillo",
+    "withoutStats": 0,
+    "players": [
+      {
+        "name": "Donny Sands",
+        "position": "C"
+      },
+      {
+        "name": "Ramon Rios",
+        "position": "2B"
+      },
+      {
+        "name": "Christian Villanueva",
+        "position": "3B"
+      },
+      {
+        "name": "Niko Vasquez",
+        "position": "SS"
+      },
+      {
+        "name": "J.P. Martínez",
+        "position": "LF"
+      },
+      {
+        "name": "Brandon Villarreal",
+        "position": "CF"
+      },
+      {
+        "name": "Fernando Villegas",
+        "position": "RF"
+      },
+      {
+        "name": "Jose Lizarraga",
+        "position": "IF"
+      },
+      {
+        "name": "Jorge Morales",
+        "position": "DH"
+      },
+      {
+        "name": "Zach Mort",
+        "position": "SP"
+      },
+      {
+        "name": "Alex Claudio",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Algodoneros Unión Laguna",
+    "withoutStats": 2,
+    "players": [
+      {
+        "name": "Francisco Arcia",
+        "position": "C"
+      },
+      {
+        "name": "Mason Martin",
+        "position": "1B"
+      },
+      {
+        "name": "Isan Díaz",
+        "position": "2B"
+      },
+      {
+        "name": "Eguy Rosario",
+        "position": "3B"
+      },
+      {
+        "name": "Didi Gregorius",
+        "position": "SS"
+      },
+      {
+        "name": "Nicholas Torres",
+        "position": "LF"
+      },
+      {
+        "name": "Julian Escobedo",
+        "position": "CF"
+      },
+      {
+        "name": "Edgar Robles",
+        "position": "RF"
+      },
+      {
+        "name": "Yadir Drake",
+        "position": "DH"
+      },
+      {
+        "name": "Aldo Montes",
+        "position": "SP"
+      },
+      {
+        "name": "Thomas McIlraith",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Tecolotes de los Dos Laredos",
+    "withoutStats": 1,
+    "players": [
+      {
+        "name": "Alejandro Flores",
+        "position": "C"
+      },
+      {
+        "name": "Ali Castillo",
+        "position": "2B"
+      },
+      {
+        "name": "Luis De Los Santos",
+        "position": "3B"
+      },
+      {
+        "name": "Marcos Valenzuela",
+        "position": "SS"
+      },
+      {
+        "name": "Cade Gotta",
+        "position": "LF"
+      },
+      {
+        "name": "Zoilo Almonte",
+        "position": "CF"
+      },
+      {
+        "name": "Miles Simington",
+        "position": "RF"
+      },
+      {
+        "name": "Jonathan Araúz",
+        "position": "IF"
+      },
+      {
+        "name": "Ryan Aguilar",
+        "position": "DH"
+      },
+      {
+        "name": "Nate Antone",
+        "position": "SP"
+      },
+      {
+        "name": "Taylor Williams",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Charros de Jalisco",
+    "withoutStats": 0,
+    "players": [
+      {
+        "name": "Alfredo Hurtado",
+        "position": "C"
+      },
+      {
+        "name": "Kyle Garlick",
+        "position": "1B"
+      },
+      {
+        "name": "Michael Wielansky",
+        "position": "2B"
+      },
+      {
+        "name": "Mateo Gil",
+        "position": "3B"
+      },
+      {
+        "name": "Johneshwy Fargas",
+        "position": "LF"
+      },
+      {
+        "name": "Allen Córdoba",
+        "position": "CF"
+      },
+      {
+        "name": "Dwight Smith Jr.",
+        "position": "RF"
+      },
+      {
+        "name": "Willie Calhoun",
+        "position": "IF"
+      },
+      {
+        "name": "Alex D. Mejia",
+        "position": "DH"
+      },
+      {
+        "name": "Manny Barreda",
+        "position": "SP"
+      },
+      {
+        "name": "Reymin Guduan",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Rieleros de Aguascalientes",
+    "withoutStats": 0,
+    "players": [
+      {
+        "name": "Carlos Mendivil",
+        "position": "C"
+      },
+      {
+        "name": "David Rodríguez",
+        "position": "1B"
+      },
+      {
+        "name": "Matt McDermott",
+        "position": "2B"
+      },
+      {
+        "name": "Gabriel Noriega",
+        "position": "3B"
+      },
+      {
+        "name": "Angel Reyes",
+        "position": "LF"
+      },
+      {
+        "name": "Maikel Serrano",
+        "position": "CF"
+      },
+      {
+        "name": "Sergio Perez",
+        "position": "RF"
+      },
+      {
+        "name": "Angel Camacho",
+        "position": "IF"
+      },
+      {
+        "name": "Aaron Antonini",
+        "position": "DH"
+      },
+      {
+        "name": "Oscar De La Cruz",
+        "position": "SP"
+      },
+      {
+        "name": "Jonathan Vargas",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Pericos de Puebla",
+    "withoutStats": 0,
+    "players": [
+      {
+        "name": "Michael De La Cruz",
+        "position": "C"
+      },
+      {
+        "name": "Lazaro Alonso",
+        "position": "1B"
+      },
+      {
+        "name": "Cristhian Adames",
+        "position": "SS"
+      },
+      {
+        "name": "Herlis Rodriguez",
+        "position": "LF"
+      },
+      {
+        "name": "Lorenzo Cedrola",
+        "position": "CF"
+      },
+      {
+        "name": "Henry Ramos",
+        "position": "RF"
+      },
+      {
+        "name": "Miguel Guzman",
+        "position": "IF"
+      },
+      {
+        "name": "Samar Leyva",
+        "position": "IF"
+      },
+      {
+        "name": "José Rondon",
+        "position": "DH"
+      },
+      {
+        "name": "Vladimir Gutierrez",
+        "position": "SP"
+      },
+      {
+        "name": "Liarvis Breto",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Piratas de Campeche",
+    "withoutStats": 1,
+    "players": [
+      {
+        "name": "Fernando Flores",
+        "position": "C"
+      },
+      {
+        "name": "Jesse Castillo",
+        "position": "1B"
+      },
+      {
+        "name": "Connor Hollis",
+        "position": "2B"
+      },
+      {
+        "name": "Christian Ibarra",
+        "position": "3B"
+      },
+      {
+        "name": "Michael Baca",
+        "position": "SS"
+      },
+      {
+        "name": "Jesus Fabela",
+        "position": "LF"
+      },
+      {
+        "name": "Abraham Almonte",
+        "position": "CF"
+      },
+      {
+        "name": "Cal Mitchell",
+        "position": "RF"
+      },
+      {
+        "name": "Armando Alvarez",
+        "position": "DH"
+      },
+      {
+        "name": "Tommy Doyle",
+        "position": "SP"
+      },
+      {
+        "name": "Tyler Thomas",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Conspiradores de Querétaro",
+    "withoutStats": 0,
+    "players": [
+      {
+        "name": "Hendrik Clementina",
+        "position": "C"
+      },
+      {
+        "name": "Henry Urrutia",
+        "position": "1B"
+      },
+      {
+        "name": "Yangervis Solarte",
+        "position": "3B"
+      },
+      {
+        "name": "Keven Lamas",
+        "position": "SS"
+      },
+      {
+        "name": "Alen Hanson",
+        "position": "LF"
+      },
+      {
+        "name": "Rainel Rosario",
+        "position": "CF"
+      },
+      {
+        "name": "Fabricio Macias",
+        "position": "RF"
+      },
+      {
+        "name": "Kelvin Gutiérrez",
+        "position": "IF"
+      },
+      {
+        "name": "Yurisbel Gracial",
+        "position": "DH"
+      },
+      {
+        "name": "Junior Guerra",
+        "position": "SP"
+      },
+      {
+        "name": "Roman Mendez",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Tigres de Quintana Roo",
+    "withoutStats": 1,
+    "players": [
+      {
+        "name": "Alexis Wilson",
+        "position": "C"
+      },
+      {
+        "name": "Manuel Boscan",
+        "position": "1B"
+      },
+      {
+        "name": "Diosbel Arias",
+        "position": "2B"
+      },
+      {
+        "name": "Diego Madero",
+        "position": "SS"
+      },
+      {
+        "name": "Danny Ortiz",
+        "position": "LF"
+      },
+      {
+        "name": "J.J. Matijevic",
+        "position": "CF"
+      },
+      {
+        "name": "Roberto Gonzalez",
+        "position": "RF"
+      },
+      {
+        "name": "Cristopher Gastelum",
+        "position": "IF"
+      },
+      {
+        "name": "Aldo Flores",
+        "position": "DH"
+      },
+      {
+        "name": "Ulises Joaquin",
+        "position": "SP"
+      },
+      {
+        "name": "Trevor Kelley",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Olmecas de Tabasco",
+    "withoutStats": 2,
+    "players": [
+      {
+        "name": "Alan Espinoza",
+        "position": "C"
+      },
+      {
+        "name": "Seth Beer",
+        "position": "1B"
+      },
+      {
+        "name": "Marco Hernández",
+        "position": "2B"
+      },
+      {
+        "name": "Jasson Atondo",
+        "position": "3B"
+      },
+      {
+        "name": "Angelo Castellano",
+        "position": "SS"
+      },
+      {
+        "name": "Phillip Ervin",
+        "position": "LF"
+      },
+      {
+        "name": "Randy Romero",
+        "position": "CF"
+      },
+      {
+        "name": "Luis González",
+        "position": "RF"
+      },
+      {
+        "name": "Domingo Leyba",
+        "position": "DH"
+      },
+      {
+        "name": "Austin Warner",
+        "position": "SP"
+      },
+      {
+        "name": "Nolan Blackwood",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "El Águila de Veracruz",
+    "withoutStats": 2,
+    "players": [
+      {
+        "name": "Chris Williams",
+        "position": "C"
+      },
+      {
+        "name": "Roberto Ramos",
+        "position": "1B"
+      },
+      {
+        "name": "Kristian Delgado",
+        "position": "3B"
+      },
+      {
+        "name": "César Izturis Jr.",
+        "position": "SS"
+      },
+      {
+        "name": "Wynton Bernard",
+        "position": "LF"
+      },
+      {
+        "name": "Daniel Montano",
+        "position": "CF"
+      },
+      {
+        "name": "Luis Partida",
+        "position": "RF"
+      },
+      {
+        "name": "Andrés Alvarez",
+        "position": "IF"
+      },
+      {
+        "name": "Austin Shenton",
+        "position": "DH"
+      },
+      {
+        "name": "César Vargas",
+        "position": "SP"
+      },
+      {
+        "name": "Mario Jimenez",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Dorados de Chihuahua",
+    "withoutStats": 3,
+    "players": [
+      {
+        "name": "Gilberto Vizcarra",
+        "position": "C"
+      },
+      {
+        "name": "Carlos Munoz",
+        "position": "1B"
+      },
+      {
+        "name": "Coco Montes",
+        "position": "2B"
+      },
+      {
+        "name": "Andrelton Simmons",
+        "position": "SS"
+      },
+      {
+        "name": "Jacob Rhinesmith",
+        "position": "LF"
+      },
+      {
+        "name": "Damon Dues",
+        "position": "CF"
+      },
+      {
+        "name": "Rafael Franco",
+        "position": "RF"
+      },
+      {
+        "name": "Aaron Lugo",
+        "position": "IF"
+      },
+      {
+        "name": "Andre Lipcius",
+        "position": "DH"
+      },
+      {
+        "name": "Caleb Smith",
+        "position": "SP"
+      },
+      {
+        "name": "Ralph Garza Jr.",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Guerreros de Oaxaca",
+    "withoutStats": 0,
+    "players": [
+      {
+        "name": "Ricardo Valenzuela",
+        "position": "C"
+      },
+      {
+        "name": "Alexi Amarista",
+        "position": "2B"
+      },
+      {
+        "name": "Sebastian Garcia",
+        "position": "3B"
+      },
+      {
+        "name": "Juan Santana",
+        "position": "SS"
+      },
+      {
+        "name": "Yonathan Daza",
+        "position": "LF"
+      },
+      {
+        "name": "Aristides Aquino",
+        "position": "CF"
+      },
+      {
+        "name": "Luis Barrera",
+        "position": "RF"
+      },
+      {
+        "name": "Jorge Flores",
+        "position": "IF"
+      },
+      {
+        "name": "Alfredo Lopez",
+        "position": "DH"
+      },
+      {
+        "name": "Alemao Hernandez",
+        "position": "SP"
+      },
+      {
+        "name": "Reid Birlingmair",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Caliente de Durango",
+    "withoutStats": 0,
+    "players": [
+      {
+        "name": "Webster Rivas",
+        "position": "C"
+      },
+      {
+        "name": "Reynaldo Rodriguez",
+        "position": "1B"
+      },
+      {
+        "name": "Jonathan Villar",
+        "position": "2B"
+      },
+      {
+        "name": "Leobaldo Piña",
+        "position": "SS"
+      },
+      {
+        "name": "Jose Carlos Urena",
+        "position": "LF"
+      },
+      {
+        "name": "Daniel Johnson",
+        "position": "CF"
+      },
+      {
+        "name": "Antonio Castaneda",
+        "position": "RF"
+      },
+      {
+        "name": "Drew Stankiewicz",
+        "position": "IF"
+      },
+      {
+        "name": "Yariel Gonzalez",
+        "position": "DH"
+      },
+      {
+        "name": "Devin Smeltzer",
+        "position": "SP"
+      },
+      {
+        "name": "Manuel Chavez",
+        "position": "RP"
+      }
+    ]
+  },
+  {
+    "team": "Bravos de León",
+    "withoutStats": 0,
+    "players": [
+      {
+        "name": "Carlos Martínez",
+        "position": "C"
+      },
+      {
+        "name": "Aderlin Rodríguez",
+        "position": "1B"
+      },
+      {
+        "name": "Gabriel Cancel",
+        "position": "2B"
+      },
+      {
+        "name": "Luis Medina",
+        "position": "3B"
+      },
+      {
+        "name": "Jermaine Palacios",
+        "position": "SS"
+      },
+      {
+        "name": "Jimmy Kerrigan",
+        "position": "LF"
+      },
+      {
+        "name": "Connor Panas",
+        "position": "CF"
+      },
+      {
+        "name": "Alan Garcia",
+        "position": "RF"
+      },
+      {
+        "name": "Sandber Pimentel",
+        "position": "DH"
+      },
+      {
+        "name": "Faustino Carrera",
+        "position": "SP"
+      },
+      {
+        "name": "David Gutierrez",
+        "position": "RP"
+      }
+    ]
+  }
+]

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+    <rect width="200" height="200" rx="100" fill="#1A1A1A" />
+    <circle cx="100" cy="100" r="90" fill="#C4122F" />
+    <circle cx="100" cy="75" r="38" fill="#FFFFFF" />
+    <path d="M 40 170 C 40 120, 160 120, 160 170 Z" fill="#FFFFFF" />
+    <text x="100" y="180" font-family="system-ui, sans-serif" font-size="16" font-weight="900" fill="#C4122F" text-anchor="middle">#55 T. Stankiewicz</text>
+  </svg>

@@ -1,0 +1,21 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const Database=require('better-sqlite3');
+const store=require('../src/services/rosterStore');
+test('sync deduplicates accents, archives absences, preserves custom media and repeat edits',()=>{
+ const db=new Database(':memory:');
+ db.exec(`CREATE TABLE equipos(id INTEGER PRIMARY KEY); INSERT INTO equipos VALUES(1);
+ CREATE TABLE jugadores(id INTEGER PRIMARY KEY,equipo_id INTEGER,mlb_id INTEGER,numero INTEGER,nombre TEXT,posicion TEXT,foto_url TEXT,bio_texto TEXT);
+ INSERT INTO jugadores VALUES(1,1,NULL,13,'Isaac Rodríguez','2B','/custom.png','Mi bio'),(2,1,42,74,'Isaac Rodriguez','2B','https://midfield.mlbstatic.com/x',''),(3,1,NULL,3,'Anterior','P','','');`);
+ store.init(db);
+ const player={mlb_id:42,nombre:'Isaac Rodriguez',numero:74,posicion:'2B',foto_url:'https://midfield.mlbstatic.com/new',bio_texto:''};
+ const result=store.apply(db,1,[player],'2026-09-10');
+ assert.equal(result.active,1);assert.equal(result.duplicates,1);
+ assert.equal(store.list(db,1).length,1);assert.equal(store.list(db,1,true).length,3);
+ assert.equal(db.prepare('SELECT foto_url FROM jugadores WHERE id=1').get().foto_url,'/custom.png');
+ db.prepare('UPDATE jugadores SET numero=88,foto_url=? WHERE id=2').run('/manual.png');
+ store.apply(db,1,[{...player,numero:75}],'2026-09-11');
+ assert.equal(store.list(db,1)[0].numero,88);assert.equal(store.list(db,1)[0].foto_url,'/manual.png');
+ assert.throws(()=>store.apply(db,1,[],'2026-09-11'));
+ assert.equal(store.list(db,1).length,1);db.close();
+});

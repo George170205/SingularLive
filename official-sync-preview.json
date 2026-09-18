@@ -1,0 +1,261 @@
+{
+  "teams": [
+    {
+      "team": "TIJ",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 22,
+      "duplicates": 1,
+      "active": 32
+    },
+    {
+      "team": "MTY",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 21,
+      "duplicates": 3,
+      "active": 32
+    },
+    {
+      "team": "MEX",
+      "inserted": 0,
+      "updated": 31,
+      "archived": 16,
+      "duplicates": 0,
+      "active": 31
+    },
+    {
+      "team": "YUC",
+      "inserted": 0,
+      "updated": 30,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 30
+    },
+    {
+      "team": "MVA",
+      "inserted": 0,
+      "updated": 31,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 31
+    },
+    {
+      "team": "SAL",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 11,
+      "duplicates": 0,
+      "active": 32
+    },
+    {
+      "team": "LAG",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 32
+    },
+    {
+      "team": "LAR",
+      "inserted": 0,
+      "updated": 31,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 31
+    },
+    {
+      "team": "JAL",
+      "inserted": 0,
+      "updated": 31,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 31
+    },
+    {
+      "team": "AGS",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 32
+    },
+    {
+      "team": "PUE",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 13,
+      "duplicates": 0,
+      "active": 32
+    },
+    {
+      "team": "CAM",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 32
+    },
+    {
+      "team": "QRO",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 32
+    },
+    {
+      "team": "TIG",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 32
+    },
+    {
+      "team": "TAB",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 8,
+      "duplicates": 0,
+      "active": 32
+    },
+    {
+      "team": "VER",
+      "inserted": 0,
+      "updated": 27,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 27
+    },
+    {
+      "team": "CHI",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 32
+    },
+    {
+      "team": "OAX",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 32
+    },
+    {
+      "team": "DUR",
+      "inserted": 0,
+      "updated": 32,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 32
+    },
+    {
+      "team": "LEO",
+      "inserted": 0,
+      "updated": 33,
+      "archived": 0,
+      "duplicates": 0,
+      "active": 33
+    }
+  ],
+  "calendar": [],
+  "bracket": [
+    {
+      "id": "N_R1_1",
+      "score": [
+        4,
+        1
+      ]
+    },
+    {
+      "id": "N_R1_2",
+      "score": [
+        4,
+        1
+      ]
+    },
+    {
+      "id": "N_R1_3",
+      "score": [
+        4,
+        1
+      ]
+    },
+    {
+      "id": "N_R2_1",
+      "score": [
+        4,
+        1
+      ]
+    },
+    {
+      "id": "N_R2_2",
+      "score": [
+        1,
+        4
+      ]
+    },
+    {
+      "id": "N_R3_1",
+      "score": [
+        4,
+        1
+      ]
+    },
+    {
+      "id": "S_R1_1",
+      "score": [
+        4,
+        3
+      ]
+    },
+    {
+      "id": "S_R1_2",
+      "score": [
+        4,
+        2
+      ]
+    },
+    {
+      "id": "S_R1_3",
+      "score": [
+        1,
+        4
+      ]
+    },
+    {
+      "id": "S_R2_1",
+      "score": [
+        2,
+        4
+      ]
+    },
+    {
+      "id": "S_R2_2",
+      "score": [
+        4,
+        3
+      ]
+    },
+    {
+      "id": "S_R3_1",
+      "score": [
+        4,
+        1
+      ]
+    },
+    {
+      "id": "FINAL",
+      "score": [
+        1,
+        1
+      ]
+    }
+  ],
+  "lineups": [],
+  "skipped": [],
+  "cachedGames": 1004
+}

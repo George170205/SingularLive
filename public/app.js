@@ -250,6 +250,9 @@ function initSocket() {
   });
 
   socket.on('calendario:actualizado', () => { loadCalendario(); loadBracket(); });
+  socket.on('bsf:actualizado', (evt) => {
+    if (typeof window.onBsfSocketUpdate === 'function') window.onBsfSocketUpdate(evt);
+  });
   socket.on('disconnect', () => {
     updateSyncBadge('offline', 'Desconectado', '--');
   });
@@ -1639,6 +1642,12 @@ function switchPanel(panelKey) {
     document.getElementById('overlays-view').classList.add('active');
     document.getElementById('tab-btn-overlays').classList.add('active');
     renderOverlaysCatalog();
+  } else if (panelKey === 'bsf') {
+    const bsfEl = document.getElementById('bsf-view');
+    if (bsfEl) bsfEl.classList.add('active');
+    const tabBsf = document.getElementById('tab-btn-bsf');
+    if (tabBsf) tabBsf.classList.add('active');
+    if (typeof window.initBsfModule === 'function') window.initBsfModule();
   }
 }
 
@@ -2193,4 +2202,71 @@ async function syncCurrentTeamRosterFromMlb() {
       btn.textContent = originalText || 'Sincronizar Roster Oficial (MLB)';
     }
   }
+}
+
+
+// =========================================================
+// CONTROL FICHA PERSONALIZADA CON VIDEO (Singular 3EXsWdUL...)
+// =========================================================
+
+async function triggerCustomPlayerStats(state = 'In') {
+  try {
+    const name = document.getElementById('custom-stats-name')?.value || 'Roel Ramírez';
+    const team = document.getElementById('custom-stats-team')?.value || 'TOROS DE TIJUANA';
+    const relevos = document.getElementById('custom-stats-relevos')?.value || '47';
+    const entradas = document.getElementById('custom-stats-entradas')?.value || '46.0';
+    const pclawhip = document.getElementById('custom-stats-pclawhip')?.value || '1.76/0.89';
+    const bateo = document.getElementById('custom-stats-bateo')?.value || '0.190';
+    const kbb = document.getElementById('custom-stats-kbb')?.value || '63/9';
+    const holds = document.getElementById('custom-stats-holds')?.value || '19';
+    const nota = document.getElementById('custom-stats-nota')?.value || '*JUGÓ CON CARDENALES DE SAN LUIS EN 2020 Y 2021';
+
+    const payloadBody = {
+      state,
+      player: {
+        nombre: name,
+        relevos,
+        entradas,
+        pclawhip,
+        bateo_contra: bateo,
+        k_bb: kbb,
+        holds,
+        bio_texto: nota
+      },
+      team: {
+        nombre: team
+      },
+      options: {
+        videoUrl: 'http://localhost:3000/assets/Fondos/Fondo-Azul-Optimizado.mp4'
+      }
+    };
+
+    const res = await fetch('/api/singular/custom-stats/state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payloadBody)
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      const isOnline = state === 'In';
+      const slide = document.getElementById('slide-custom_player_stats');
+      const tag = document.getElementById('slide-tag-custom_player_stats');
+      if (slide) slide.checked = isOnline;
+      if (tag) {
+        tag.textContent = isOnline ? 'ON' : 'OFF';
+        tag.className = `slide-status-tag ${isOnline ? '' : 'off'}`;
+      }
+      console.log(`[Singular] Ficha Personalizada ${state}: ${name}`);
+    } else {
+      alert(`Error al controlar Ficha en Singular: ${data.error || 'Desconocido'}`);
+    }
+  } catch (err) {
+    console.error('Error triggerCustomPlayerStats:', err);
+    alert(`Error de conexión: ${err.message}`);
+  }
+}
+
+function toggleCustomPlayerStats(checked) {
+  triggerCustomPlayerStats(checked ? 'In' : 'Out1');
 }

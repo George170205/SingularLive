@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Barlow+Semi+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/bsf.css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body class="broadcast-rig">
@@ -40,6 +41,9 @@
       </button>
       <button class="console-tab tab-outlined-red" id="tab-btn-overlays" onclick="switchPanel('overlays')">
         Gestión de overlays
+      </button>
+      <button class="console-tab tab-outlined-bsf" id="tab-btn-bsf" onclick="switchPanel('bsf')">
+        Béisbol Sin Fronteras
       </button>
     </nav>
 
@@ -395,6 +399,86 @@
                   <span class="slide-status-tag off" id="slide-tag-player_bio">OFF</span>
                 </div>
               </div>
+
+              
+              <!-- 6. Ficha Personalizada con Video de Fondo (Nueva Composición 3EXsWdUL...) -->
+              <div class="overlay-toggle-item" style="border-left: 3px solid #00E676; background: rgba(0, 230, 118, 0.04); margin-top: 6px;">
+                <div class="overlay-toggle-info">
+                  <span class="overlay-toggle-name">Ficha Completa + Video de Fondo</span>
+                  <span class="overlay-toggle-desc">Composición Personalizada Singular (3EXsWdUL...)</span>
+                </div>
+                <div class="overlay-slide-wrapper">
+                  <label class="slide-switch">
+                    <input type="checkbox" id="slide-custom_player_stats" onchange="toggleCustomPlayerStats(this.checked)">
+                    <span class="slide-slider"></span>
+                  </label>
+                  <span class="slide-status-tag off" id="slide-tag-custom_player_stats">OFF</span>
+                </div>
+              </div>
+
+              <!-- Drawer Ficha Personalizada & Video -->
+              <div class="panel-b-bio-drawer" id="drawer-custom-player-stats" style="border-color: rgba(0, 230, 118, 0.3);">
+                <div class="panel-b-bio-header">
+                  <span style="font-size: 9px; font-weight: 700; color: #00E676; letter-spacing: 0.5px;">FICHA ESTADÍSTICA PITCHER / JUGADOR:</span>
+                  <span style="font-size: 9px; color: var(--t-gray-400);">Fondo-Azul (4.77 MB Local)</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px; margin-bottom: 6px;">
+                  <div>
+                    <label style="font-size: 9px; color: var(--t-gray-400);">Nombre Jugador:</label>
+                    <input type="text" id="custom-stats-name" class="b-input" style="font-size: 11px; padding: 3px 6px;" value="Roel Ramírez">
+                  </div>
+                  <div>
+                    <label style="font-size: 9px; color: var(--t-gray-400);">Equipo:</label>
+                    <input type="text" id="custom-stats-team" class="b-input" style="font-size: 11px; padding: 3px 6px;" value="TOROS DE TIJUANA">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-bottom: 6px;">
+                  <div>
+                    <label style="font-size: 8px; color: var(--t-gray-400);">RELEVOS:</label>
+                    <input type="text" id="custom-stats-relevos" class="b-input" style="font-size: 10px; padding: 2px 4px;" value="47">
+                  </div>
+                  <div>
+                    <label style="font-size: 8px; color: var(--t-gray-400);">ENTRADAS:</label>
+                    <input type="text" id="custom-stats-entradas" class="b-input" style="font-size: 10px; padding: 2px 4px;" value="46.0">
+                  </div>
+                  <div>
+                    <label style="font-size: 8px; color: var(--t-gray-400);">PCLA/WHIP:</label>
+                    <input type="text" id="custom-stats-pclawhip" class="b-input" style="font-size: 10px; padding: 2px 4px;" value="1.76/0.89">
+                  </div>
+                  <div>
+                    <label style="font-size: 8px; color: var(--t-gray-400);">BATEO CONTRA:</label>
+                    <input type="text" id="custom-stats-bateo" class="b-input" style="font-size: 10px; padding: 2px 4px;" value="0.190">
+                  </div>
+                  <div>
+                    <label style="font-size: 8px; color: var(--t-gray-400);">K/BB:</label>
+                    <input type="text" id="custom-stats-kbb" class="b-input" style="font-size: 10px; padding: 2px 4px;" value="63/9">
+                  </div>
+                  <div>
+                    <label style="font-size: 8px; color: var(--t-gray-400);">HOLDS:</label>
+                    <input type="text" id="custom-stats-holds" class="b-input" style="font-size: 10px; padding: 2px 4px;" value="19">
+                  </div>
+                </div>
+
+                <div style="margin-bottom: 6px;">
+                  <label style="font-size: 9px; color: var(--t-gray-400);">Curiosidad / Nota:</label>
+                  <input type="text" id="custom-stats-nota" class="b-input" style="font-size: 10px; padding: 3px 6px;" value="*JUGÓ CON CARDENALES DE SAN LUIS EN 2020 Y 2021">
+                </div>
+
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <button type="button" class="btn-action-primary" style="flex: 1; padding: 6px; font-size: 10px; font-weight: 700; background: linear-gradient(135deg, #00E676, #009624); border: none; color: #000;" onclick="triggerCustomPlayerStats('In')">
+                    LANZAR FICHA [IN]
+                  </button>
+                  <button type="button" class="btn-run-sub" style="flex: 1; width: auto; padding: 6px; font-size: 10px; font-weight: 700;" onclick="triggerCustomPlayerStats('Out1')">
+                    QUITAR [OUT]
+                  </button>
+                  <a href="https://controlapi.singular.live/output/19gqpFwqjnvwXjQ2gcJWDs/Output?aspect=16:9" target="_blank" class="btn-small-action" style="padding: 6px 10px; font-size: 10px; text-decoration: none; display: flex; align-items: center;" title="Abrir salida en vivo de esta composición">
+                    Ver Salida
+                  </a>
+                </div>
+              </div>
+
 
               <!-- Lanzador Rápido de Bio en Vivo (Panel B) -->
               <div class="panel-b-bio-drawer">
@@ -969,8 +1053,16 @@
       </div>
     </section>
 
+    <!-- ============================================== -->
+    <!-- MÓDULO BÉISBOL SIN FRONTERAS (0FuwnDA057...)   -->
+    <!-- ============================================== -->
+    <section id="bsf-view" class="view-panel">
+      <!-- Renderizado por public/bsf.js -->
+    </section>
+
   </main>
 
   <script src="/app.js"></script>
+  <script src="/bsf.js"></script>
 </body>
 </html>

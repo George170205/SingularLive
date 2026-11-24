@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
-    "test": "node --test tests/calendar.test.cjs tests/lineup.test.cjs tests/roster.test.cjs tests/lineup-loading.test.cjs tests/lineup-templates.test.cjs tests/overlays.test.cjs",
-    "dev": "node src/server.js"
+    "start": "node init && node src/server.js",
+    "test": "node --test tests/calendar.test.cjs tests/lineup.test.cjs tests/roster.test.cjs tests/lineup-loading.test.cjs tests/lineup-templates.test.cjs tests/overlays.test.cjs tests/bsf.test.cjs",
+    "dev": "node init && node src/server.js"
   },
   "keywords": [],
   "author": "",

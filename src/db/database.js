@@ -152,6 +152,7 @@ function initSchema() {
   require('./calendarMigration')(db);
   require('../services/rosterStore').init(db);
   require('../services/lineupTemplates').init(db);
+  require('../services/bsfStore').init(db);
 }
 
 function seedData() {

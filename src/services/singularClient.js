@@ -125,8 +125,10 @@ class SingularQueue {
     } catch (err) {
       this.lastLatencyMs = Date.now() - start;
       this.lastStatus = 'error';
-      this.lastError = err.message;
-      console.error('[Singular Queue Error]:', err.message);
+      const detail = err.cause?.code || err.cause?.message;
+      const msg = detail && !String(err.message).includes(detail) ? `${err.message} (${detail})` : err.message;
+      this.lastError = msg;
+      console.error('[Singular Queue Error]:', msg);
       reject(err);
     } finally {
       this.isProcessing = false;
@@ -137,10 +139,22 @@ class SingularQueue {
 
 const queue = new SingularQueue();
 
-// Cliente REST hacia la API de Singular.Live
-async function patchSingular(appToken, subCompositionId, payload, state = null) {
+function isRetryableNetworkError(err) {
+  if (!err) return false;
+  if (err.status && err.status >= 500 && err.status < 600) return true;
+  if (err.name === 'AbortError' || err.name === 'TimeoutError') return true;
+  const code = err.cause?.code || err.code || '';
+  if (/ECONNRESET|ETIMEDOUT|EPIPE|UND_ERR_SOCKET|ENOTFOUND/i.test(code)) return true;
+  return /fetch failed|network|socket/i.test(String(err.message || ''));
+}
+
+// Cliente REST hacia la API de Singular.Live con reintento ante cortes keep-alive
+async function patchSingular(appToken, subCompositionId, payload, state = null, options = {}) {
   const token = appToken || config.SINGULAR_APP_TOKEN;
   const url = `${config.SINGULAR_API_BASE}/${token}/control`;
+  const fetchFn = options.fetchFn || global.fetch;
+  const retryDelays = Array.isArray(options.retryDelays) ? options.retryDelays : [350, 700];
+  const timeoutMs = Number(options.timeoutMs || 15000);
 
   const item = {
     subCompositionId,
@@ -153,20 +167,43 @@ async function patchSingular(appToken, subCompositionId, payload, state = null) 
   const body = JSON.stringify([item]);
 
   return queue.enqueue(async () => {
-    const response = await fetch(url, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body
-    });
+    let lastErr = null;
+    const maxAttempts = 1 + retryDelays.length;
 
-    if (!response.ok) {
-      const text = await response.text();
-      throw new Error(`Singular API error (${response.status}): ${text}`);
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        const response = await fetchFn(url, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body,
+          signal: AbortSignal.timeout(timeoutMs)
+        });
+
+        if (!response.ok) {
+          const text = await response.text();
+          const apiErr = new Error(`Singular API error (${response.status}): ${text}`);
+          apiErr.status = response.status;
+          throw apiErr;
+        }
+
+        return await response.json().catch(() => ({ ok: true }));
+      } catch (err) {
+        const causeDetail = err.cause?.code || err.cause?.message;
+        if (causeDetail && !String(err.message).includes(causeDetail)) {
+          err.message = `${err.message} (${causeDetail})`;
+        }
+        lastErr = err;
+        if (attempt < maxAttempts && isRetryableNetworkError(err)) {
+          await new Promise(resolve => setTimeout(resolve, retryDelays[attempt - 1]));
+          continue;
+        }
+        throw err;
+      }
     }
 
-    return await response.json().catch(() => ({ ok: true }));
+    throw lastErr;
   });
 }
 
@@ -386,6 +423,39 @@ function buildUpperRightSocialPayload(text = '', socialMediaLogo = '') {
   };
 }
 
+
+// 12. Ficha Completa de Jugador / Pitcher Stats con Video de Fondo (Composición Personalizada: 3EXsWdULgKljfXOakhd6QQ)
+function buildCustomPlayerStatsPayload(player = {}, team = {}, options = {}) {
+  const videoUrl = options.videoUrl !== undefined
+    ? options.videoUrl
+    : 'http://localhost:3000/assets/Fondos/Fondo-Azul-Optimizado.mp4';
+
+  const defaultImg = 'https://image.singular.live/81ee6e3c159e11677f20c0c48694d88e/images/7crQthOiXhUCkWlrnLlos1_w1080h1350.jpeg';
+
+  return {
+    "Name_League": options.league || "LIGA MEXICANA DE BEISBOL",
+    "Name_Player": (player && player.nombre) || "Roel Ramírez",
+    "Img_Roel_Ramirez": resolveAssetToDataUrl((player && (player.foto_url || player.headshot_url)) || '') || defaultImg,
+    "Team Name": (team && team.nombre) ? team.nombre.toUpperCase() : "TOROS DE TIJUANA",
+    "Relevos": "RELEVOS: ",
+    "Num_Relevos": String((options && options.relevos) || (player && player.relevos) || "47"),
+    "Entradas": "ENTRADAS:",
+    "Num_Entradas": String((options && options.entradas) || (player && player.entradas) || "46.0"),
+    "PCLAWHIP": "PCLA/WHIP:",
+    "Num_PCLAWHIP": String((options && options.pclawhip) || (player && player.pclawhip) || "1.76/0.89"),
+    "Bateo Contra": "BATEO CONTRA:",
+    "Num_Bateo Contra": String((options && options.bateoContra) || (player && player.bateo_contra) || "0.190"),
+    "KBB": "K/BB:",
+    "Num_KBB": String((options && options.kbb) || (player && player.k_bb) || "63/9"),
+    "HOLDS": "HOLDS:",
+    "Num_HOLDS": String((options && options.holds) || (player && player.holds) || "19"),
+    "*Juego con Cardenales de": (options && options.nota) || (player && player.bio_texto) || "*JUGÓ CON CARDENALES DE SAN LUIS EN 2020 Y 2021",
+    "Line red": "|",
+    "Bodymovin Loop": (options && options.bodymovin) || "//assets.singular.live/81ee6e3c159e11677f20c0c48694d88e/jsons/4A7bGdFn4ErHTm0AEVLKXm.json",
+    "Video Clip": videoUrl
+  };
+}
+
 module.exports = {
   queue,
   patchSingular,
@@ -408,5 +478,6 @@ module.exports = {
   buildLower2LinePayload,
   buildUpperRight1LinePayload,
   buildUpperRight2LinePayload,
-  buildUpperRightSocialPayload
+  buildUpperRightSocialPayload,
+  buildCustomPlayerStatsPayload
 };
